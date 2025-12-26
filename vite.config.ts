@@ -23,7 +23,7 @@ export default defineConfig({
       manifest: {
         name: 'Candinow',
         short_name: 'Candinow',
-        description: 'Application Candinow',
+        description: "Un tracker de candidatures moderne, offline-first, conçu pour la clarté et l'action. Suivez vos entretiens, relances et offres avec une interface pastel épurée.",
         theme_color: '#000000',
         background_color: '#ffffff',
         display: 'standalone',
