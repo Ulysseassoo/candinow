@@ -2,11 +2,9 @@ import { motion } from 'framer-motion';
 import { LayoutDashboard, ListTodo, Settings as SettingsIcon } from 'lucide-react';
 import { NavItem } from './NavItem';
 
-import type { AppState } from "../types/appState";
-
 interface BottomNavProps {
-  currentView: AppState['view'];
-  onViewChange: (view: AppState['view']) => void;
+  currentView: 'list' | 'dashboard' | 'settings';
+  onViewChange: (view: 'list' | 'dashboard' | 'settings') => void;
 }
 
 export const BottomNav = ({ currentView, onViewChange }: BottomNavProps) => {

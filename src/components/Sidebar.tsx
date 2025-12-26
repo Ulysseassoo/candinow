@@ -2,11 +2,9 @@ import { motion } from 'framer-motion';
 import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles } from 'lucide-react';
 import { NavItem } from './NavItem';
 
-import type { AppState } from '../types/appState';
-
 interface SidebarProps {
-  currentView: AppState['view'];
-  onViewChange: (view: AppState['view']) => void;
+  currentView: 'list' | 'dashboard' | 'settings';
+  onViewChange: (view: 'list' | 'dashboard' | 'settings') => void;
   onLogoClick: () => void;
 }
 
@@ -23,7 +21,7 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps
         </div>
         <div>
           <span className="text-2xl font-extrabold text-text-primary tracking-tight block leading-none">Candinow</span>
-          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 block">Blossom Soft</span>
+          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 block">Candinow</span>
         </div>
       </motion.button>
 
@@ -62,7 +60,7 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps
           </div>
           <div className="flex items-center gap-2 text-primary-dark mb-3">
             <Sparkles size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Conseil Blossom</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Conseil</span>
           </div>
           <p className="text-xs text-text-primary/70 leading-relaxed font-semibold relative z-10">
             Chaque "non" te rapproche d'un "oui" épanouissant. Garde ton élan !

@@ -1,10 +1,8 @@
 import { motion } from 'framer-motion';
 import { Flower2 } from 'lucide-react';
 
-import type { AppState } from "../types/appState";
-
 interface AppHeaderProps {
-  currentView: AppState['view'];
+  currentView: 'list' | 'dashboard' | 'settings';
   onLogoClick: () => void;
 }
 

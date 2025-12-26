@@ -14,11 +14,11 @@ import {
   Building2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import useAppStore from '../stores/useStore';
+import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 
 export const Landing = () => {
-  const { setView } = useAppStore();
+  const navigate = useNavigate();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -62,7 +62,7 @@ export const Landing = () => {
           <span className="text-xl font-black text-text-primary tracking-tighter">Candinow</span>
         </div>
         <div className="hidden md:flex items-center gap-8">
-          <Button variant="ghost" size="sm" className="rounded-full" onClick={() => setView('list')}>
+          <Button variant="ghost" size="sm" className="rounded-full" onClick={() => navigate({ to: '/app' })}>
             Accéder à l'App
           </Button>
         </div>
@@ -97,7 +97,7 @@ export const Landing = () => {
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-            <Button size="lg" className="h-16 px-10 text-sm rounded-full" onClick={() => setView('list')}>
+            <Button size="lg" className="h-16 px-10 text-sm rounded-full" onClick={() => navigate({ to: '/app' })}>
               Commencer l'aventure <ArrowRight size={18} className="ml-2" />
             </Button>
             <Button variant="outline" size="lg" className="h-16 px-10 text-sm rounded-full" onClick={() => {

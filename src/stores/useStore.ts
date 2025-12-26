@@ -1,7 +1,7 @@
 
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { AppState, AppActions } from '../types/appState';
+import type { AppState, AppActions } from '../types/AppState';
 import type { JobApplication } from '../types/JobApplication';
 
 const useAppStore = create<AppState & AppActions>()(
