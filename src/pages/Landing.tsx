@@ -16,6 +16,7 @@ import {
 import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
+import moment from 'moment';
 
 export const Landing = () => {
   const navigate = useNavigate();
@@ -280,7 +281,7 @@ export const Landing = () => {
           <span className="font-black text-text-primary">Candinow</span>
         </div>
         <p className="text-[10px] font-black text-text-secondary uppercase tracking-[0.3em] text-center">
-          © {new Date().getFullYear()} Candinow — Tous droits réservés.
+          © {moment().year()} Candinow — Tous droits réservés.
         </p>
       </footer>
     </div>

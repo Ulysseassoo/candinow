@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { AppState, AppActions } from '../types/AppState';
 import type { JobApplication } from '../types/JobApplication';
+import { getTodayISOString } from '../lib/dateUtils';
 
 const useAppStore = create<AppState & AppActions>()(
   persist(
@@ -24,15 +25,15 @@ const useAppStore = create<AppState & AppActions>()(
         const newApp: JobApplication = {
           ...app,
           id,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          createdAt: getTodayISOString(),
+          updatedAt: getTodayISOString(),
         };
         return { applications: [newApp, ...state.applications] };
       }),
 
       updateApplication: (id, updatedFields) => set((state) => ({
         applications: state.applications.map((app) => 
-          app.id === id ? { ...app, ...updatedFields, updatedAt: new Date().toISOString() } : app
+          app.id === id ? { ...app, ...updatedFields, updatedAt: getTodayISOString() } : app
         ),
       })),
 
