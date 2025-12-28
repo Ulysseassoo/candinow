@@ -12,10 +12,12 @@ const useAppStore = create<AppState & AppActions>()(
       view: 'landing',
       searchQuery: '',
       statusFilter: 'all',
+      isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
 
       setView: (view) => set({ view }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
       setStatusFilter: (statusFilter) => set({ statusFilter }),
+      setIsOnline: (isOnline) => set({ isOnline }),
 
       addApplication: (app) => set((state) => {
         const id = typeof crypto.randomUUID === 'function' 

@@ -5,6 +5,7 @@ export interface AppState {
     view: 'landing' | 'list' | 'dashboard' | 'settings';
     searchQuery: string;
     statusFilter: AppStatus | 'all';
+    isOnline: boolean;
   }
   
   export interface AppActions {
@@ -16,5 +17,6 @@ export interface AppState {
     setStatusFilter: (filter: AppState['statusFilter']) => void;
     resetData: () => void;
     importData: (data: JobApplication[]) => void;
+    setIsOnline: (isOnline: boolean) => void;
   }
   

@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from './ui/button';
 import { Sparkles, Bug, Heart, CheckCircle2 } from 'lucide-react';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { sendFeedbackEmail } from '@/lib/feedbackUtils';
 
 const feedbackSchema = z.object({
   type: z.enum(['feature', 'bug', 'love']),
@@ -18,6 +20,9 @@ interface FeedbackFormProps {
 
 export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const isOnline = useOnlineStatus();
+  
   const {
     register,
     handleSubmit,
@@ -28,9 +33,19 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
   });
 
   const onSubmit = async (data: FeedbackFormValues) => {
-    console.log('Feedback reçu:', data);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setSubmitted(true);
+    setError(null);
+    
+    if (!isOnline) {
+      setError('Vous êtes actuellement hors ligne. Veuillez vous connecter à Internet pour envoyer votre message.');
+      return;
+    }
+    
+    try {
+      await sendFeedbackEmail(data);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'envoi');
+    }
   };
 
   if (submitted) {
@@ -53,9 +68,17 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <div className="space-y-4">
-        <p className="text-sm font-medium text-text-secondary leading-relaxed">
-          Une idée ? Un bug ? Ou juste envie de partager ton expérience ? Dis-nous tout.
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-text-secondary leading-relaxed">
+            Une idée ? Un bug ? Ou juste envie de partager ton expérience ? Dis-nous tout.
+          </p>
+        </div>
+        
+        {error && (
+          <div className="p-4 bg-danger-soft/30 border border-danger/20 rounded-ui">
+            <p className="text-sm font-bold text-danger">{error}</p>
+          </div>
+        )}
 
         <div className="grid grid-cols-3 gap-3">
           {[

@@ -7,6 +7,7 @@ import { BottomNav } from '../components/BottomNav';
 import { AppHeader } from '../components/AppHeader';
 import { getTodayISO } from '../lib/dateUtils';
 import moment from 'moment';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
 export const Route = createFileRoute('/app')({
   component: AppLayout,
@@ -16,6 +17,8 @@ function AppLayout() {
   const navigate = useNavigate({ from: '/app' });
   const location = useLocation();
   const { applications } = useAppStore();
+  
+  useOnlineStatus();
 
   const getCurrentView = (): 'list' | 'dashboard' | 'settings' => {
     const path = location.pathname;
