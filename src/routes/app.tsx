@@ -30,6 +30,10 @@ function AppLayout() {
   const currentView = getCurrentView();
 
   useEffect(() => {
+    if (typeof Notification === 'undefined') {
+      return;
+    }
+
     if (Notification.permission === 'default') {
       Notification.requestPermission();
     }
