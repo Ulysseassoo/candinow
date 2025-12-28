@@ -12,6 +12,11 @@ export const useSettings = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerateTestData = async () => {
+    if (!import.meta.env.DEV) {
+      console.warn('La génération de données de test n\'est disponible qu\'en développement');
+      return;
+    }
+
     if (!window.confirm("Voulez-vous générer 50 candidatures de test ? Vos données actuelles seront remplacées.")) {
       return;
     }

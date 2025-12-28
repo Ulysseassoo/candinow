@@ -26,6 +26,8 @@ function SettingsPage() {
     triggerFileInput,
   } = useSettings();
 
+  const isDev = import.meta.env.DEV;
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 15 }}
@@ -33,7 +35,7 @@ function SettingsPage() {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="max-w-3xl mx-auto space-y-8 pb-12"
     >
-      <DemoSection onGenerate={handleGenerateTestData} isLoading={isLoading} />
+      {isDev && <DemoSection onGenerate={handleGenerateTestData} isLoading={isLoading} />}
       
       <PrivacySection />
 

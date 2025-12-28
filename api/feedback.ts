@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     const { data, error } = await resend.emails.send({
-      from: 'Candinow <feedback@candinow.com>',
+      from: 'Candinow <onboarding@resend.dev>',
       to: [process.env.RESEND_EMAIL_TO as string],
       subject: `Feedback Candinow - ${typeLabels[type] || type}`,
       html: `
