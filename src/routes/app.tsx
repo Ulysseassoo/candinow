@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { createFileRoute, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
-import { AnimatePresence, motion } from 'framer-motion';
 import useAppStore from '../stores/useStore';
 import { Sidebar } from '../components/Sidebar';
 import { BottomNav } from '../components/BottomNav';
@@ -20,10 +19,11 @@ function AppLayout() {
   
   useOnlineStatus();
 
-  const getCurrentView = (): 'list' | 'dashboard' | 'settings' => {
+  const getCurrentView = (): 'list' | 'dashboard' | 'settings' | 'feedback' => {
     const path = location.pathname;
     if (path === '/app/dashboard') return 'dashboard';
     if (path === '/app/settings') return 'settings';
+    if (path === '/app/feedback') return 'feedback';
     return 'list';
   };
 
@@ -55,7 +55,7 @@ function AppLayout() {
     checkReminders();
   }, [applications]);
 
-  const handleViewChange = (newView: 'list' | 'dashboard' | 'settings') => {
+  const handleViewChange = (newView: 'list' | 'dashboard' | 'settings' | 'feedback') => {
     if (newView === 'list') {
       navigate({ to: '/app' });
     } else {
@@ -82,17 +82,7 @@ function AppLayout() {
         />
 
         <div className="flex-1 overflow-y-auto no-scrollbar">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
+          <Outlet />
         </div>
       </main>
 

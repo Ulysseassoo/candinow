@@ -1,4 +1,3 @@
-
 export type AppStatus = 'applied' | 'follow_up' | 'interview' | 'offer' | 'rejected' | 'ghosted';
 
 export type FollowUpStatus = 'none' | 'due' | 'planned' | 'done' | 'contacted' | 'awaiting' | 'responded';
@@ -19,6 +18,9 @@ export interface JobApplication {
     followUpStatus?: FollowUpStatus;
     followUpDate?: string;
     reminderAt?: string;
+    followUpCount?: number;
+    lastActionDate?: string;
+    nextFollowUpDate?: string;
 
     contactName?: string;
     contactEmail?: string;

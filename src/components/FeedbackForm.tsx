@@ -8,6 +8,7 @@ import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { sendFeedbackEmail } from '@/lib/feedbackUtils';
 
 const feedbackSchema = z.object({
+  name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   type: z.enum(['feature', 'bug', 'love']),
   message: z.string().min(5, "Le message est trop court pour être utile !"),
 });
@@ -15,7 +16,7 @@ const feedbackSchema = z.object({
 type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 
 interface FeedbackFormProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
@@ -58,9 +59,11 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
           <h3 className="text-2xl font-black text-text-primary tracking-tight">Merci beaucoup !</h3>
           <p className="text-text-secondary font-medium mt-2">Tes retours aident Candinow à grandir.</p>
         </div>
-        <Button onClick={onClose} variant="outline" className="mt-4">
-          Fermer
-        </Button>
+        {onClose && (
+          <Button onClick={onClose} variant="outline" className="mt-4">
+            Fermer
+          </Button>
+        )}
       </div>
     );
   }
@@ -68,17 +71,30 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-text-secondary leading-relaxed">
-            Une idée ? Un bug ? Ou juste envie de partager ton expérience ? Dis-nous tout.
-          </p>
-        </div>
-        
+        {onClose && (
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-text-secondary leading-relaxed">
+              Une idée ? Un bug ? Ou juste envie de partager ton expérience ? Dis-nous tout.
+            </p>
+          </div>
+        )}
+
         {error && (
           <div className="p-4 bg-danger-soft/30 border border-danger/20 rounded-ui">
             <p className="text-sm font-bold text-danger">{error}</p>
           </div>
         )}
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest ml-1">Ton Nom</label>
+          <input
+            type="text"
+            {...register('name')}
+            placeholder="Ex: Marie Dupont"
+            className={`w-full px-5 py-4 bg-gray-50 border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm ${errors.name ? 'border-danger/50' : 'border-gray-100 focus:border-primary'}`}
+          />
+          {errors.name && <p className="text-[10px] text-danger font-bold mt-1 ml-1">{errors.name.message}</p>}
+        </div>
 
         <div className="grid grid-cols-3 gap-3">
           {[
@@ -114,8 +130,12 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
       </div>
 
       <div className="flex gap-4">
-        <Button type="button" variant="ghost" onClick={onClose} className="flex-1">Plus tard</Button>
-        <Button type="submit" disabled={isSubmitting} className="flex-[2]">Envoyer mon avis</Button>
+        {onClose && (
+          <Button type="button" variant="ghost" onClick={onClose} className="flex-1">Plus tard</Button>
+        )}
+        <Button type="submit" disabled={isSubmitting} className={onClose ? "flex-[2]" : "w-full"}>
+          Envoyer mon avis
+        </Button>
       </div>
     </form>
   );

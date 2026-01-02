@@ -2,7 +2,7 @@ import type { AppStatus, JobApplication } from "./JobApplication";
 
 export interface AppState {
     applications: JobApplication[];
-    view: 'landing' | 'list' | 'dashboard' | 'settings';
+    view: 'landing' | 'list' | 'dashboard' | 'settings' | 'feedback';
     searchQuery: string;
     statusFilter: AppStatus | 'all';
     isOnline: boolean;
@@ -12,6 +12,7 @@ export interface AppState {
     addApplication: (app: Omit<JobApplication, 'id' | 'createdAt' | 'updatedAt'>) => void;
     updateApplication: (id: string, app: Partial<JobApplication>) => void;
     deleteApplication: (id: string) => void;
+    sendFollowUp: (id: string) => void;
     setView: (view: AppState['view']) => void;
     setSearchQuery: (query: string) => void;
     setStatusFilter: (filter: AppState['statusFilter']) => void;

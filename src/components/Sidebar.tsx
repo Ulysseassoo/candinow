@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles } from 'lucide-react';
+import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles, MessageSquareHeart } from 'lucide-react';
 import { NavItem } from './NavItem';
 
 interface SidebarProps {
-  currentView: 'list' | 'dashboard' | 'settings';
-  onViewChange: (view: 'list' | 'dashboard' | 'settings') => void;
+  currentView: 'list' | 'dashboard' | 'settings' | 'feedback';
+  onViewChange: (view: 'list' | 'dashboard' | 'settings' | 'feedback') => void;
   onLogoClick: () => void;
 }
 
@@ -26,26 +26,36 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps
       </motion.button>
 
       <nav className="flex flex-col gap-3">
-        <NavItem 
-          id="list" 
-          icon={ListTodo} 
-          label="Candidatures" 
+        <NavItem
+          id="list"
+          icon={ListTodo}
+          label="Candidatures"
           isActive={currentView === 'list'}
           onClick={() => onViewChange('list')}
         />
-        <NavItem 
-          id="dashboard" 
-          icon={LayoutDashboard} 
-          label="Dashboard" 
+        <NavItem
+          id="dashboard"
+          icon={LayoutDashboard}
+          label="Dashboard"
           isActive={currentView === 'dashboard'}
           onClick={() => onViewChange('dashboard')}
         />
-        <NavItem 
-          id="settings" 
-          icon={SettingsIcon} 
-          label="Paramètres" 
+        <NavItem
+          id="settings"
+          icon={SettingsIcon}
+          label="Paramètres"
           isActive={currentView === 'settings'}
           onClick={() => onViewChange('settings')}
+        />
+
+        <div className="border-t border-border/30 my-2"></div>
+
+        <NavItem
+          id="feedback"
+          icon={MessageSquareHeart}
+          label="Ton avis"
+          isActive={currentView === 'feedback'}
+          onClick={() => onViewChange('feedback')}
         />
       </nav>
 

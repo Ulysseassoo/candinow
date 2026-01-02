@@ -1,4 +1,5 @@
 export interface FeedbackData {
+  name: string;
   type: 'feature' | 'bug' | 'love';
   message: string;
 }

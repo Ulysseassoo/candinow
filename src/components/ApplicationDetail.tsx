@@ -1,16 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import type { JobApplication, FollowUpStatus } from '@/types/JobApplication';
 import { STATUS_CONFIG, FOLLOW_UP_CONFIG } from '../constants';
 import { Badge } from './Badge';
 import { Button } from './ui/button';
-import { 
-  Building2, MapPin, Globe, Mail, Phone, Calendar, 
+import {
+  Building2, MapPin, Globe, Mail, Phone, Calendar,
   ExternalLink, StickyNote, User, Flower2,
-  BellRing, CheckCircle2, Timer, Send
+  BellRing, CheckCircle2, Timer, Send, AlertCircle, Clock
 } from 'lucide-react';
 import useAppStore from '@/stores/useStore';
-import { getTodayISOString, getDaysSince } from '@/lib/dateUtils';
+import { getTodayISOString, getDaysSince, formatDateShort } from '@/lib/dateUtils';
+import { getDaysUntilFollowUp, isFollowUpDue, shouldStopFollowUps } from '@/lib/followUpUtils';
+import { Toast } from './Toast';
 
 interface ApplicationDetailProps {
   app: JobApplication;
@@ -18,14 +21,34 @@ interface ApplicationDetailProps {
   onClose: () => void;
 }
 
-export const ApplicationDetail = ({ app, onEdit, onClose }: ApplicationDetailProps) => {
-  const { updateApplication } = useAppStore();
+export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: ApplicationDetailProps) => {
+  const { applications, updateApplication, sendFollowUp } = useAppStore();
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  // Get fresh data from store
+  const app = applications.find(a => a.id === initialApp.id) || initialApp;
 
   const handleUpdateFollowUp = (status: FollowUpStatus) => {
-    updateApplication(app.id, { 
+    updateApplication(app.id, {
       followUpStatus: status,
-      followUpDate: status === 'contacted' ? getTodayISOString() : app.followUpDate 
+      followUpDate: status === 'contacted' ? getTodayISOString() : app.followUpDate
     });
+  };
+
+  const handleSendFollowUp = () => {
+    const currentCount = app.followUpCount ?? 0;
+    sendFollowUp(app.id);
+
+    const nextCount = currentCount + 1;
+    const willBeGhosted = nextCount >= 3;
+
+    setToastMessage(
+      willBeGhosted
+        ? `✓ 3ème relance envoyée! Candidature marquée comme "ghosted".`
+        : `✓ Relance ${nextCount}/3 envoyée! Prochaine relance prévue dans ${nextCount === 1 ? '5 jours' : '7 jours'}.`
+    );
+    setShowToast(true);
   };
 
   const infoRow = (icon: React.ReactNode, label: string, value?: string, isLink?: boolean) => {
@@ -54,7 +77,15 @@ export const ApplicationDetail = ({ app, onEdit, onClose }: ApplicationDetailPro
   const needsFollowUp = app.status === 'applied' && getDaysSinceApply() >= 10 && (!app.followUpStatus || app.followUpStatus === 'none' || app.followUpStatus === 'due');
 
   return (
-    <div className="space-y-8 pb-4">
+    <>
+      <Toast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        type="success"
+      />
+
+      <div className="space-y-8 pb-4">
       <div className="bg-primary-soft/40 p-8 rounded-[32px] border border-primary/10 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 text-primary opacity-5 transform scale-150 translate-x-1/4 -translate-y-1/4">
           <Flower2 size={150} />
@@ -75,6 +106,118 @@ export const ApplicationDetail = ({ app, onEdit, onClose }: ApplicationDetailPro
           </div>
         </div>
       </div>
+
+      {/* Automatic Follow-up Timeline */}
+      {!shouldStopFollowUps(app.status) && app.nextFollowUpDate && (
+        <motion.div
+          key={`follow-up-${app.followUpCount}`}
+          initial={{ scale: 1 }}
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 0.4 }}
+          className="bg-gradient-to-br from-primary-soft/30 to-accent/10 p-6 rounded-ui border-2 border-primary/20 shadow-soft space-y-4"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-xl shadow-sm">
+                <Clock size={20} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-text-primary">Prochaine relance automatique</h3>
+                <p className="text-xs text-text-secondary font-medium">
+                  Relance {(app.followUpCount ?? 0) + 1} sur 3
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-text-secondary font-medium">
+                {formatDateShort(app.nextFollowUpDate)}
+              </p>
+              {(() => {
+                const daysUntil = getDaysUntilFollowUp(app.nextFollowUpDate);
+                if (daysUntil === null) return null;
+                if (daysUntil < 0) {
+                  return (
+                    <p className="text-xs font-black text-danger flex items-center gap-1 justify-end">
+                      <AlertCircle size={12} />
+                      En retard de {Math.abs(daysUntil)}j
+                    </p>
+                  );
+                }
+                if (daysUntil === 0) {
+                  return <p className="text-xs font-black text-warning">Aujourd'hui</p>;
+                }
+                return <p className="text-xs font-black text-primary">Dans {daysUntil}j</p>;
+              })()}
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              {[0, 1, 2].map((index) => {
+                const isCurrent = (app.followUpCount ?? 0) === index;
+                const isPast = (app.followUpCount ?? 0) > index;
+                return (
+                  <div key={index} className="flex flex-col items-center flex-1">
+                    <motion.div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs ${
+                        isPast ? 'bg-success text-white' :
+                        isCurrent ? 'bg-primary text-white animate-pulse' :
+                        'bg-gray-200 text-gray-400'
+                      }`}
+                      animate={isPast ? { scale: [1, 1.2, 1] } : {}}
+                      transition={{ duration: 0.5 }}
+                    >
+                      {isPast ? '✓' : index + 1}
+                    </motion.div>
+                    <p className="text-[9px] font-bold text-text-secondary mt-1">
+                      {index === 0 ? '+5j' : index === 1 ? '+5j' : '+7j'}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="relative h-1 bg-gray-200 rounded-full overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-primary rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${((app.followUpCount ?? 0) / 3) * 100}%` }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              />
+            </div>
+          </div>
+
+          {isFollowUpDue(app.nextFollowUpDate) && (
+            <Button
+              onClick={handleSendFollowUp}
+              className="w-full bg-primary text-white hover:bg-primary/90 font-bold flex items-center justify-center gap-2"
+            >
+              <Send size={16} />
+              Marquer la relance comme envoyée
+            </Button>
+          )}
+        </motion.div>
+      )}
+
+      {/* Application marked as ghosted */}
+      {app.status === 'ghosted' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gray-50 p-6 rounded-ui border-2 border-gray-200 space-y-2"
+        >
+          <div className="flex items-center gap-3 text-text-secondary">
+            <AlertCircle size={20} />
+            <div>
+              <h3 className="text-sm font-black">Application sans réponse</h3>
+              <p className="text-xs font-medium">
+                3 relances envoyées sans retour. Cette candidature a été marquée comme abandonnée.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Système de Tracking Relance Granulaire */}
       <div className="bg-white p-6 rounded-ui border-2 border-primary/10 shadow-soft space-y-6">
@@ -176,6 +319,7 @@ export const ApplicationDetail = ({ app, onEdit, onClose }: ApplicationDetailPro
           Modifier les détails
         </Button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

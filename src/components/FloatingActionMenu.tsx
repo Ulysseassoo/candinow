@@ -1,11 +1,8 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquareHeart, Plus, MoreVertical } from 'lucide-react';
-import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Plus } from 'lucide-react';
 
 interface FloatingActionMenuProps {
   onAddClick: () => void;
-  onFeedbackClick: () => void;
-  hasApplications: boolean;
 }
 
 const Tooltip = ({ children, text }: { children: React.ReactNode; text: string }) => {
@@ -22,90 +19,20 @@ const Tooltip = ({ children, text }: { children: React.ReactNode; text: string }
   );
 };
 
-export const FloatingActionMenu = ({ onAddClick, onFeedbackClick, hasApplications }: FloatingActionMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+export const FloatingActionMenu = ({ onAddClick }: FloatingActionMenuProps) => {
   return (
-    <div className="fixed bottom-28 lg:bottom-12 right-6 flex flex-col items-end gap-4 z-[70]">
-      <AnimatePresence mode="wait">
-        {isOpen && (
-          <>
-            <Tooltip text="Ton avis">
-              <motion.button
-                initial={{ opacity: 0, scale: 0.3, y: 10, x: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-                exit={{ opacity: 0, scale: 0.3, y: 10, x: -10 }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 25,
-                  duration: 0.3
-                }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setIsOpen(false);
-                  onFeedbackClick();
-                }}
-                className="w-14 h-14 bg-accent text-white rounded-2xl flex items-center justify-center shadow-lg shadow-accent/20 transition-all"
-              >
-                <MessageSquareHeart size={24} />
-              </motion.button>
-            </Tooltip>
-
-            {hasApplications && (
-              <Tooltip text="Ajouter">
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.3, y: 10, x: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.3, y: 10, x: -10 }}
-                  transition={{ 
-                    type: "spring", 
-                    stiffness: 300, 
-                    damping: 25,
-                    duration: 0.3,
-                    delay: 0.05
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setIsOpen(false);
-                    onAddClick();
-                  }}
-                  className="w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center shadow-[0_15px_30px_-5px_rgba(255,183,197,0.5)] transition-all"
-                >
-                  <Plus size={24} />
-                </motion.button>
-              </Tooltip>
-            )}
-          </>
-        )}
-      </AnimatePresence>
-
-      <Tooltip text={isOpen ? "Fermer" : "Menu"}>
+    <div className="fixed bottom-28 lg:bottom-12 right-6 z-[70]">
+      <Tooltip text="Ajouter">
         <motion.button
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsOpen(!isOpen)}
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all ${
-            isOpen 
-              ? 'bg-text-primary text-white' 
-              : 'bg-primary text-white'
-          }`}
+          whileTap={{ scale: 0.95 }}
+          onClick={onAddClick}
+          className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center shadow-[0_15px_30px_-5px_rgba(255,183,197,0.5)] transition-all"
+          aria-label="Ajouter une candidature"
         >
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 200, 
-              damping: 20,
-              duration: 0.3
-            }}
-          >
-            <MoreVertical size={24} />
-          </motion.div>
+          <Plus size={28} strokeWidth={2.5} />
         </motion.button>
       </Tooltip>
     </div>

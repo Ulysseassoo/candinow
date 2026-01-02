@@ -1,10 +1,11 @@
 import type { JobApplication } from "@/types/JobApplication";
 import { motion } from "framer-motion";
-import { ArrowRight, Building2, Calendar, Clock, Edit3, Trash2 } from "lucide-react";
+import { ArrowRight, Building2, Calendar, Clock, Edit3, Trash2, AlertCircle } from "lucide-react";
 import { Badge } from "./Badge";
 import { STATUS_CONFIG } from "@/constants";
 import { Button } from "./ui/button";
 import { getDaysSince, formatDateShort } from "@/lib/dateUtils";
+import { isFollowUpDue, getDaysUntilFollowUp } from "@/lib/followUpUtils";
 
 interface Props {
     app: JobApplication;
@@ -55,6 +56,24 @@ export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteAppli
                     <Clock size={12} />
                     {getDaysWithoutResponse(app.appliedAt)}j
                 </div>
+                {app.nextFollowUpDate && isFollowUpDue(app.nextFollowUpDate) && app.status !== 'ghosted' && (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-warning-soft text-warning rounded-full text-[10px] font-black uppercase tracking-tighter border border-warning/20 animate-pulse">
+                        <AlertCircle size={12} />
+                        Relance due
+                    </div>
+                )}
+                {app.nextFollowUpDate && !isFollowUpDue(app.nextFollowUpDate) && app.status !== 'ghosted' && (() => {
+                    const daysUntil = getDaysUntilFollowUp(app.nextFollowUpDate);
+                    if (daysUntil && daysUntil <= 2) {
+                        return (
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-soft text-primary rounded-full text-[10px] font-black uppercase tracking-tighter border border-primary/10">
+                                <Clock size={12} />
+                                Relance dans {daysUntil}j
+                            </div>
+                        );
+                    }
+                    return null;
+                })()}
             </div>
 
             <div className="flex items-center justify-between mt-2 pt-4 border-t border-border/30" onClick={e => e.stopPropagation()}>

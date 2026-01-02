@@ -2,7 +2,6 @@ import { AppForm } from '@/components/AppForm';
 import { ApplicationCard } from '@/components/ApplicationCard';
 import { ApplicationDetail } from '@/components/ApplicationDetail';
 import DesktopTable from '@/components/DesktopTable';
-import { FeedbackForm } from '@/components/FeedbackForm';
 import { Modal } from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,10 +11,11 @@ import type { AppStatus, JobApplication } from '@/types/JobApplication';
 import { createFileRoute } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpDown, Filter, Flower2, Plus, RotateCcw, Search } from 'lucide-react';
-import { useState } from 'react';
-import { useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
 import { FloatingActionMenu } from '@/components/FloatingActionMenu';
+import { TodaysActions } from '@/components/TodaysActions';
+import { Pagination } from '@/components/Pagination';
 
 type SortOption = 'newest' | 'oldest' | 'company' | 'title';
 
@@ -32,14 +32,16 @@ function ApplicationsListPage() {
     setStatusFilter,
     addApplication,
     updateApplication,
-    deleteApplication
+    deleteApplication,
+    sendFollowUp
   } = useAppStore();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [editingApp, setEditingApp] = useState<JobApplication | null>(null);
   const [viewingApp, setViewingApp] = useState<JobApplication | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const filteredAndSortedApps = useMemo(() => {
     let result = applications.filter((application) => {
@@ -58,6 +60,29 @@ function ApplicationsListPage() {
       return 0;
     });
   }, [applications, searchQuery, statusFilter, sortBy]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredAndSortedApps.length / itemsPerPage);
+  const paginatedApps = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredAndSortedApps.slice(startIndex, endIndex);
+  }, [filteredAndSortedApps, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (items: number) => {
+    setItemsPerPage(items);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, sortBy]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
@@ -117,6 +142,14 @@ function ApplicationsListPage() {
         )}
       </motion.div>
 
+      {applications.length > 0 && (
+        <TodaysActions
+          applications={applications}
+          sendFollowUp={sendFollowUp}
+          setViewingApp={setViewingApp}
+        />
+      )}
+
       <AnimatePresence mode="wait">
         {filteredAndSortedApps.length === 0 ? (
           <motion.div
@@ -150,22 +183,31 @@ function ApplicationsListPage() {
             )}
           </motion.div>
         ) : (
-          <div key="content">
+          <div key="content" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-6">
-              {filteredAndSortedApps.map(app => (
+              {paginatedApps.map(app => (
                 <ApplicationCard key={app.id} app={app} setViewingApp={setViewingApp} setEditingApp={setEditingApp} deleteApplication={deleteApplication} />
               ))}
             </div>
 
-            <DesktopTable filteredAndSortedApps={filteredAndSortedApps} setViewingApp={setViewingApp} setEditingApp={setEditingApp} deleteApplication={deleteApplication} />
+            <DesktopTable filteredAndSortedApps={paginatedApps} setViewingApp={setViewingApp} setEditingApp={setEditingApp} deleteApplication={deleteApplication} />
+
+            {filteredAndSortedApps.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                itemsPerPage={itemsPerPage}
+                totalItems={filteredAndSortedApps.length}
+                onPageChange={handlePageChange}
+                onItemsPerPageChange={handleItemsPerPageChange}
+              />
+            )}
           </div>
         )}
       </AnimatePresence>
 
       <FloatingActionMenu
         onAddClick={() => setIsAddModalOpen(true)}
-        onFeedbackClick={() => setIsFeedbackModalOpen(true)}
-        hasApplications={applications.length > 0}
       />
 
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Nouvelle candidature">
@@ -176,9 +218,6 @@ function ApplicationsListPage() {
       </Modal>
       <Modal isOpen={!!viewingApp} onClose={() => setViewingApp(null)} title="Détails">
         {viewingApp && <ApplicationDetail app={viewingApp} onClose={() => setViewingApp(null)} onEdit={() => { setEditingApp(viewingApp); setViewingApp(null); }} />}
-      </Modal>
-      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Ton avis">
-        <FeedbackForm onClose={() => setIsFeedbackModalOpen(false)} />
       </Modal>
     </div>
   );

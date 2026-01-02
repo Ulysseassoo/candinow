@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { AppState, AppActions } from '../types/AppState';
 import type { JobApplication } from '../types/JobApplication';
 import { getTodayISOString } from '../lib/dateUtils';
+import { initializeFollowUpTracking, handleFollowUpSent } from '../lib/followUpUtils';
 
 const useAppStore = create<AppState & AppActions>()(
   persist(
@@ -20,12 +21,15 @@ const useAppStore = create<AppState & AppActions>()(
       setIsOnline: (isOnline) => set({ isOnline }),
 
       addApplication: (app) => set((state) => {
-        const id = typeof crypto.randomUUID === 'function' 
-          ? crypto.randomUUID() 
+        const id = typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
           : Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
-          
+
+        const followUpTracking = initializeFollowUpTracking(app.appliedAt);
+
         const newApp: JobApplication = {
           ...app,
+          ...followUpTracking,
           id,
           createdAt: getTodayISOString(),
           updatedAt: getTodayISOString(),
@@ -34,9 +38,19 @@ const useAppStore = create<AppState & AppActions>()(
       }),
 
       updateApplication: (id, updatedFields) => set((state) => ({
-        applications: state.applications.map((app) => 
+        applications: state.applications.map((app) =>
           app.id === id ? { ...app, ...updatedFields, updatedAt: getTodayISOString() } : app
         ),
+      })),
+
+      sendFollowUp: (id) => set((state) => ({
+        applications: state.applications.map((app) => {
+          if (app.id === id) {
+            const followUpUpdates = handleFollowUpSent(app);
+            return { ...app, ...followUpUpdates };
+          }
+          return app;
+        }),
       })),
 
       deleteApplication: (id) => set((state) => ({
