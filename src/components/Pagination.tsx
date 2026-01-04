@@ -26,19 +26,16 @@ export const Pagination = ({
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages is less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show first page
       pages.push(1);
 
       if (currentPage > 3) {
         pages.push('...');
       }
 
-      // Show pages around current page
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
 
@@ -50,7 +47,6 @@ export const Pagination = ({
         pages.push('...');
       }
 
-      // Always show last page
       pages.push(totalPages);
     }
 
@@ -63,7 +59,6 @@ export const Pagination = ({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
-      {/* Items per page selector */}
       <div className="flex items-center gap-3">
         <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">
           Afficher:
@@ -85,14 +80,12 @@ export const Pagination = ({
         </div>
       </div>
 
-      {/* Page info and navigation */}
       <div className="flex items-center gap-4">
         <span className="text-xs font-bold text-text-secondary">
           {startItem}-{endItem} sur {totalItems}
         </span>
 
         <div className="flex items-center gap-1">
-          {/* Previous button */}
           <Button
             size="icon"
             variant="ghost"
@@ -103,7 +96,6 @@ export const Pagination = ({
             <ChevronLeft size={16} />
           </Button>
 
-          {/* Page numbers */}
           <div className="flex items-center gap-1">
             {getPageNumbers().map((page, index) => {
               if (page === '...') {
@@ -133,7 +125,6 @@ export const Pagination = ({
             })}
           </div>
 
-          {/* Next button */}
           <Button
             size="icon"
             variant="ghost"

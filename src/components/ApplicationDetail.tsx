@@ -26,7 +26,6 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  // Get fresh data from store
   const app = applications.find(a => a.id === initialApp.id) || initialApp;
 
   const handleUpdateFollowUp = (status: FollowUpStatus) => {
@@ -107,7 +106,6 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         </div>
       </div>
 
-      {/* Automatic Follow-up Timeline */}
       {!shouldStopFollowUps(app.status) && app.nextFollowUpDate && (
         <motion.div
           key={`follow-up-${app.followUpCount}`}
@@ -151,7 +149,6 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
             </div>
           </div>
 
-          {/* Progress bar */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               {[0, 1, 2].map((index) => {
@@ -199,7 +196,6 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         </motion.div>
       )}
 
-      {/* Application marked as ghosted */}
       {app.status === 'ghosted' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -219,7 +215,6 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         </motion.div>
       )}
 
-      {/* Système de Tracking Relance Granulaire */}
       <div className="bg-white p-6 rounded-ui border-2 border-primary/10 shadow-soft space-y-6">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
