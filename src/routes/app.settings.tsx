@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { useSettings } from '@/hooks/useSettings';
+import { ThemeSection } from '@/components/settings/ThemeSection';
 import { DemoSection } from '@/components/settings/DemoSection';
 import { PrivacySection } from '@/components/settings/PrivacySection';
 import { ExportSection } from '@/components/settings/ExportSection';
@@ -36,6 +37,8 @@ function SettingsPage() {
       className="max-w-3xl mx-auto space-y-8 p-12 soft-card"
     >
       {isDev && <DemoSection onGenerate={handleGenerateTestData} isLoading={isLoading} />}
+
+      <ThemeSection />
 
       <PrivacySection />
 

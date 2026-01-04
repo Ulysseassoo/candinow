@@ -6,7 +6,12 @@ export const parseJSONFile = async (file: File): Promise<JobApplication[]> => {
     
     reader.onload = (event) => {
       try {
-        const json = JSON.parse(event.target?.result as string);
+        const result = event.target?.result;
+        if (typeof result !== 'string') {
+          reject(new Error('Erreur lors de la lecture du fichier'));
+          return;
+        }
+        const json = JSON.parse(result);
         if (Array.isArray(json)) {
           resolve(json);
         } else {

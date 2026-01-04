@@ -48,7 +48,7 @@ export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteAppli
             </div>
 
             <div className="flex flex-wrap gap-2 mt-2">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-tighter text-text-secondary border border-border/40">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-soft/30 rounded-full text-[10px] font-black uppercase tracking-tighter text-text-secondary border border-border/40">
                     <Calendar size={12} />
                     {formatDateShort(app.appliedAt)}
                 </div>

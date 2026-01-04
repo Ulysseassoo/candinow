@@ -7,15 +7,15 @@ export const TEST_COMPANIES = [
   'Google', 'Meta', 'Apple', 'Blossom Soft', 'Airbnb', 'Stripe', 'Mistral AI', 'Station F', 
   'Veepee', 'LVMH', 'Deezer', 'Alan', 'Back Market', 'Qonto', 'PayFit', 'Doctolib', 'ManoMano',
   'Mirakl', 'ContentSquare', 'Dataiku', 'Spendesk', 'Lydia', 'Swile', 'BlaBlaCar'
-] as const;
+];
 
 export const TEST_TITLES = [
   'Senior Product Designer', 'Front-end Engineer', 'React Developer', 'Fullstack JS', 
   'UX Researcher', 'Product Manager', 'Mobile Engineer', 'CTO', 'Lead Dev', 'UI Designer',
   'Engineering Manager', 'Solutions Architect', 'Data Scientist', 'DevOps Specialist'
-] as const;
+];
 
-export const TEST_LOCATIONS = ['Paris', 'Lyon', 'Remote', 'London', 'Berlin', 'New York', 'Bordeaux'] as const;
+export const TEST_LOCATIONS = ['Paris', 'Lyon', 'Remote', 'London', 'Berlin', 'New York', 'Bordeaux'];
 
 export const TEST_STATUSES: AppStatus[] = ['applied', 'follow_up', 'interview', 'offer', 'rejected', 'ghosted'];
 

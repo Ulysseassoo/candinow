@@ -16,6 +16,8 @@ import { getTodayISOString, getDaysSince, formatDateShort } from '@/lib/dateUtil
 import { getDaysUntilFollowUp, isFollowUpDue, shouldStopFollowUps } from '@/lib/followUpUtils';
 import { Toast } from './Toast';
 
+const FOLLOW_UP_STEPS = [0, 1, 2];
+
 interface ApplicationDetailProps {
   app: JobApplication;
   onEdit: () => void;
@@ -54,7 +56,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
   const infoRow = (icon: React.ReactNode, label: string, value?: string, isLink?: boolean) => {
     if (!value) return null;
     return (
-      <div className="flex items-start gap-4 p-5 bg-white rounded-inner border border-border/40 hover:border-primary/30 transition-all hover:shadow-soft">
+      <div className="flex items-start gap-4 p-5 bg-background rounded-inner border border-border/40 hover:border-primary/30 transition-all hover:shadow-soft">
         <div className="text-primary mt-0.5 opacity-60">{icon}</div>
         <div className="flex-1">
           <p className="text-[9px] font-black text-text-secondary uppercase tracking-[0.2em] mb-1">{label}</p>
@@ -99,7 +101,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
           />
           <h2 className="text-3xl font-black text-text-primary tracking-tight">{app.title}</h2>
           <div className="flex items-center gap-3 text-text-secondary font-bold">
-            <div className="p-2 bg-white rounded-xl shadow-sm">
+            <div className="p-2 bg-background rounded-xl shadow-sm">
               <Building2 size={18} className="text-primary" />
             </div>
             {app.company}
@@ -117,7 +119,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white rounded-xl shadow-sm">
+              <div className="p-2 bg-background rounded-xl shadow-sm">
                 <Clock size={20} className="text-primary" />
               </div>
               <div>
@@ -152,7 +154,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              {[0, 1, 2].map((index) => {
+              {FOLLOW_UP_STEPS.map((index) => {
                 const isCurrent = (app.followUpCount ?? 0) === index;
                 const isPast = (app.followUpCount ?? 0) > index;
                 return (
@@ -202,7 +204,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-gray-50 p-6 rounded-ui border-2 border-gray-200 space-y-2"
+          className="bg-background p-6 rounded-ui border-2 border-border space-y-2"
         >
           <div className="flex items-center gap-3 text-text-secondary">
             <AlertCircle size={20} />
@@ -216,7 +218,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         </motion.div>
       )}
 
-      <div className="bg-white p-6 rounded-ui border-2 border-primary/10 shadow-soft space-y-6">
+      <div className="bg-background p-6 rounded-ui border-2 border-primary/10 shadow-soft space-y-6">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
             <BellRing size={20} className="text-primary" />
@@ -252,28 +254,28 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button 
             onClick={() => handleUpdateFollowUp('planned')}
-            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'planned' ? 'bg-accent/10 border-accent text-accent' : 'bg-white border-border/40 text-text-secondary hover:border-accent/40'}`}
+            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'planned' ? 'bg-accent/10 border-accent text-accent' : 'bg-background border-border/40 text-text-secondary hover:border-accent/40'}`}
           >
             <Calendar size={20} />
             <span className="text-[9px] font-black uppercase tracking-tighter">Planifiée</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('contacted')}
-            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'contacted' ? 'bg-primary-soft border-primary text-primary-dark' : 'bg-white border-border/40 text-text-secondary hover:border-primary/40'}`}
+            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'contacted' ? 'bg-primary-soft border-primary text-primary-dark' : 'bg-background border-border/40 text-text-secondary hover:border-primary/40'}`}
           >
             <Send size={20} />
             <span className="text-[9px] font-black uppercase tracking-tighter">Contacté</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('awaiting')}
-            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'awaiting' ? 'bg-warning-soft border-warning text-warning' : 'bg-white border-border/40 text-text-secondary hover:border-warning/40'}`}
+            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'awaiting' ? 'bg-warning-soft border-warning text-warning' : 'bg-background border-border/40 text-text-secondary hover:border-warning/40'}`}
           >
             <Timer size={20} />
             <span className="text-[9px] font-black uppercase tracking-tighter">Attente</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('responded')}
-            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'responded' ? 'bg-success-soft border-success text-success' : 'bg-white border-border/40 text-text-secondary hover:border-success/40'}`}
+            className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'responded' ? 'bg-success-soft border-success text-success' : 'bg-background border-border/40 text-text-secondary hover:border-success/40'}`}
           >
             <CheckCircle2 size={20} />
             <span className="text-[9px] font-black uppercase tracking-tighter">Réponse</span>

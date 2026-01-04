@@ -4,15 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-  @apply m-0;
+  @apply m-0 bg-background text-foreground;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FFF9FA;
-  color: #4A4E69;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -28,21 +27,22 @@ code {
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  
-  /* Vos couleurs personnalisées */
-  --color-primary: #FFB7C5;
-  --color-primary-dark: #F06292;
-  --color-primary-soft: #FFF0F3;
-  --color-accent: #B8C6FF;
-  --color-success: #A5D6A7;
-  --color-success-soft: #E8F5E9;
-  --color-warning: #FFE082;
-  --color-warning-soft: #FFF8E1;
-  --color-danger: #FFAB91;
-  --color-danger-soft: #FBE9E7;
-  --color-border: #FCE4EC;
-  --color-text-primary: #4A4E69;
-  --color-text-secondary: #9A9EB3;
+
+  /* Couleurs personnalisées - utilise les variables CSS définies dans :root */
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
   
   /* Border radius personnalisés */
   --radius-ui: 32px;
@@ -81,37 +81,39 @@ code {
 
 :root {
   --radius: 0.625rem;
-  --background: #FFF9FA;
-  --foreground: #4A4E69;
-  --card: #FFFFFF;
-  --card-foreground: #4A4E69;
-  --popover: #FFFFFF;
-  --popover-foreground: #4A4E69;
+
+  /* Default theme (Rose) - These will be overridden by JavaScript */
+  --background: #FFFFFF;
+  --foreground: #2D3142;
   --primary: #FFB7C5;
+  --primary-dark: #E89BA8;
+  --primary-soft: #FFF0F3;
+  --accent: #C9ADA7;
+  --accent-soft: #F4EBE8;
+  --success: #6A994E;
+  --success-soft: #E8F5E0;
+  --warning: #F2CC8F;
+  --warning-soft: #FEF7E8;
+  --danger: #E07A5F;
+  --danger-soft: #FCE8E3;
+  --text-primary: #2D3142;
+  --text-secondary: #6B7280;
+  --border: #E5E7EB;
+
+  /* Shadcn compatibility */
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
   --primary-foreground: #FFFFFF;
-  --secondary: #FFF0F3;
-  --secondary-foreground: #4A4E69;
-  --muted: #FFF0F3;
-  --muted-foreground: #9A9EB3;
-  --accent: #B8C6FF;
+  --secondary: var(--primary-soft);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--primary-soft);
+  --muted-foreground: var(--text-secondary);
   --accent-foreground: #FFFFFF;
-  --destructive: #FFAB91;
-  --border: #FCE4EC;
-  --input: #FCE4EC;
-  --ring: #FFB7C5;
-  --chart-1: #FFB7C5;
-  --chart-2: #B8C6FF;
-  --chart-3: #A5D6A7;
-  --chart-4: #FFE082;
-  --chart-5: #FFAB91;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #4A4E69;
-  --sidebar-primary: #FFB7C5;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FFF0F3;
-  --sidebar-accent-foreground: #4A4E69;
-  --sidebar-border: #FCE4EC;
-  --sidebar-ring: #FFB7C5;
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--primary);
 }
 
 .dark {
@@ -169,10 +171,11 @@ code {
 }
 
 .soft-card {
-  background: #FFFFFF;
-  border: 1px solid #FCE4EC;
-  box-shadow: 0 10px 40px -10px rgba(255, 183, 197, 0.15);
+  background: var(--background);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
   border-radius: 32px;
+  transition: all 0.3s ease;
 }
 
 .no-scrollbar::-webkit-scrollbar { 

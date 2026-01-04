@@ -11,7 +11,7 @@ export const DemoSection = ({ onGenerate, isLoading }: DemoSectionProps) => {
     <div className="bg-accent/10 p-6 rounded-ui border-2 border-dashed border-accent/40">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-white rounded-xl text-accent shadow-sm">
+          <div className="p-3 bg-background rounded-xl text-accent shadow-sm">
             <Beaker size={24} />
           </div>
           <div>

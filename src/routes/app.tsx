@@ -74,7 +74,7 @@ function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row p-0 lg:p-8 gap-0 lg:gap-8 bg-[#FFF9FA]">
+    <div className="min-h-screen flex flex-col lg:flex-row p-0 lg:p-8 gap-0 lg:gap-8 bg-background">
       <Sidebar
         currentView={currentView}
         onViewChange={handleViewChange}

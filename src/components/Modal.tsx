@@ -35,9 +35,8 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="relative bg-white rounded-t-[40px] lg:rounded-[40px] shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden border border-primary/10 mb-0 lg:mb-0"
+            className="relative bg-background rounded-t-[40px] lg:rounded-[40px] shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden border border-primary/10 mb-0 lg:mb-0"
           >
-            {/* Drag Handle for Mobile */}
             <div className="lg:hidden w-12 h-1.5 bg-gray-100 rounded-full mx-auto mt-4 mb-2"></div>
 
             <div className="flex items-center justify-between p-6 lg:p-10 pb-4 lg:pb-6">
@@ -51,7 +50,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="p-3 bg-gray-50 hover:bg-primary-soft rounded-full transition-all text-text-secondary hover:text-primary-dark"
+                className="p-3 bg-primary-soft/30 hover:bg-primary-soft rounded-full transition-all text-text-secondary hover:text-primary-dark"
               >
                 <X size={20} />
               </motion.button>

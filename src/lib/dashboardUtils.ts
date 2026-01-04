@@ -35,12 +35,11 @@ export interface ChartDataItem extends Record<string, unknown> {
 }
 
 export const generateChartData = (applications: JobApplication[]): ChartDataItem[] => {
-  return Object.keys(STATUS_CONFIG)
-    .filter(k => k !== 'all')
-    .map(key => ({
-      name: STATUS_CONFIG[key as AppStatus].label,
-      value: applications.filter(a => a.status === key).length,
-      key: key as AppStatus,
-    }));
+  const statusKeys: AppStatus[] = ['applied', 'follow_up', 'interview', 'offer', 'rejected', 'ghosted'];
+  return statusKeys.map(statusKey => ({
+    name: STATUS_CONFIG[statusKey].label,
+    value: applications.filter(a => a.status === statusKey).length,
+    key: statusKey,
+  }));
 };
 

@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 
+const ITEMS_PER_PAGE_OPTIONS = [10, 30, 50];
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -64,14 +66,14 @@ export const Pagination = ({
           Afficher:
         </span>
         <div className="flex gap-2">
-          {[10, 30, 50].map((size) => (
+          {ITEMS_PER_PAGE_OPTIONS.map((size) => (
             <button
               key={size}
               onClick={() => onItemsPerPageChange(size)}
               className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
                 itemsPerPage === size
                   ? 'bg-primary text-white shadow-lg'
-                  : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
+                  : 'bg-primary-soft/30 text-text-secondary hover:bg-primary-soft/50'
               }`}
             >
               {size}
@@ -112,11 +114,11 @@ export const Pagination = ({
               return (
                 <button
                   key={page}
-                  onClick={() => onPageChange(page as number)}
+                  onClick={() => typeof page === 'number' && onPageChange(page)}
                   className={`h-8 w-8 rounded-lg text-xs font-black transition-all ${
                     currentPage === page
                       ? 'bg-primary text-white shadow-lg'
-                      : 'text-text-secondary hover:bg-gray-100'
+                      : 'text-text-secondary hover:bg-primary-soft/30'
                   }`}
                 >
                   {page}

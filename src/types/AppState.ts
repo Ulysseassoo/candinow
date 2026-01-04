@@ -1,4 +1,5 @@
 import type { AppStatus, JobApplication } from "./JobApplication";
+import type { ThemeName } from "../lib/themes";
 
 export interface AppState {
     applications: JobApplication[];
@@ -6,6 +7,7 @@ export interface AppState {
     searchQuery: string;
     statusFilter: AppStatus | 'all';
     isOnline: boolean;
+    theme: ThemeName;
   }
   
   export interface AppActions {
@@ -16,6 +18,7 @@ export interface AppState {
     setView: (view: AppState['view']) => void;
     setSearchQuery: (query: string) => void;
     setStatusFilter: (filter: AppState['statusFilter']) => void;
+    setTheme: (theme: ThemeName) => void;
     resetData: () => void;
     importData: (data: JobApplication[]) => void;
     setIsOnline: (isOnline: boolean) => void;

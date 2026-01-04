@@ -35,7 +35,7 @@ export const StatsGrid = ({ stats }: StatsGridProps) => {
         value={stats.ghosted} 
         icon={Ghost} 
         colorClass="text-text-secondary" 
-        bgColorClass="bg-gray-50" 
+        bgColorClass="bg-primary-soft/30" 
       />
     </div>
   );

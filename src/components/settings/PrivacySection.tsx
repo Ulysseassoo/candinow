@@ -4,7 +4,7 @@ export const PrivacySection = () => {
   return (
     <div className="bg-primary-soft/30 p-6 rounded-ui border border-primary/10">
       <div className="flex items-start gap-4">
-        <div className="p-3 bg-white rounded-xl text-primary shadow-sm">
+        <div className="p-3 bg-background rounded-xl text-primary shadow-sm">
           <Shield size={24} />
         </div>
         <div>

@@ -7,6 +7,12 @@ import { Sparkles, Bug, Heart, CheckCircle2 } from 'lucide-react';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { sendFeedbackEmail } from '@/lib/feedbackUtils';
 
+const FEEDBACK_TYPES = [
+  { id: 'love', icon: Heart, label: 'Love', color: 'text-primary' },
+  { id: 'feature', icon: Sparkles, label: 'Idée', color: 'text-accent' },
+  { id: 'bug', icon: Bug, label: 'Bug', color: 'text-danger' },
+];
+
 const feedbackSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   type: z.enum(['feature', 'bug', 'love']),
@@ -91,17 +97,13 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
             type="text"
             {...register('name')}
             placeholder="Ex: Marie Dupont"
-            className={`w-full px-5 py-4 bg-gray-50 border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm ${errors.name ? 'border-danger/50' : 'border-gray-100 focus:border-primary'}`}
+            className={`w-full px-5 py-4 bg-background border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm text-foreground ${errors.name ? 'border-danger/50' : 'border-border focus:border-primary'}`}
           />
           {errors.name && <p className="text-[10px] text-danger font-bold mt-1 ml-1">{errors.name.message}</p>}
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          {[
-            { id: 'love', icon: Heart, label: 'Love', color: 'text-primary' },
-            { id: 'feature', icon: Sparkles, label: 'Idée', color: 'text-accent' },
-            { id: 'bug', icon: Bug, label: 'Bug', color: 'text-danger' },
-          ].map((item) => (
+          {FEEDBACK_TYPES.map((item) => (
             <label key={item.id} className="cursor-pointer group">
               <input 
                 type="radio" 
@@ -109,7 +111,7 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
                 {...register('type')} 
                 className="hidden peer"
               />
-              <div className="flex flex-col items-center gap-2 p-4 rounded-inner border-2 border-gray-50 peer-checked:border-primary peer-checked:bg-primary-soft/30 group-hover:bg-gray-50 transition-all">
+              <div className="flex flex-col items-center gap-2 p-4 rounded-inner border-2 border-border peer-checked:border-primary peer-checked:bg-primary-soft/30 group-hover:bg-primary-soft/10 transition-all">
                 <item.icon className={item.color} size={20} />
                 <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">{item.label}</span>
               </div>
@@ -123,7 +125,7 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
             {...register('message')}
             placeholder="J'aimerais beaucoup voir une vue calendrier..."
             rows={5}
-            className={`w-full px-5 py-4 bg-gray-50 border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm resize-none ${errors.message ? 'border-danger/50' : 'border-gray-100 focus:border-primary'}`}
+            className={`w-full px-5 py-4 bg-background border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm text-foreground resize-none ${errors.message ? 'border-danger/50' : 'border-border focus:border-primary'}`}
           />
           {errors.message && <p className="text-[10px] text-danger font-bold mt-1 ml-1">{errors.message.message}</p>}
         </div>

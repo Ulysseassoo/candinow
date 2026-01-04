@@ -8,7 +8,7 @@ interface ExportSectionProps {
 
 export const ExportSection = ({ onExportJSON, onExportCSV }: ExportSectionProps) => {
   return (
-    <div className="bg-white p-6 rounded-ui border border-border shadow-sm flex flex-col justify-between">
+    <div className="bg-background p-6 rounded-ui border border-border shadow-sm flex flex-col justify-between">
       <div>
         <div className="flex items-center gap-3 text-text-primary mb-2">
           <Download size={20} className="text-primary" />

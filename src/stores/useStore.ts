@@ -5,6 +5,7 @@ import type { AppState, AppActions } from '../types/AppState';
 import type { JobApplication } from '../types/JobApplication';
 import { getTodayISOString } from '../lib/dateUtils';
 import { initializeFollowUpTracking, handleFollowUpSent } from '../lib/followUpUtils';
+import { defaultTheme, getTheme, applyTheme } from '../lib/themes';
 
 const useAppStore = create<AppState & AppActions>()(
   persist(
@@ -14,11 +15,17 @@ const useAppStore = create<AppState & AppActions>()(
       searchQuery: '',
       statusFilter: 'all',
       isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+      theme: defaultTheme,
 
       setView: (view) => set({ view }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
       setStatusFilter: (statusFilter) => set({ statusFilter }),
       setIsOnline: (isOnline) => set({ isOnline }),
+      setTheme: (themeName) => {
+        const theme = getTheme(themeName);
+        applyTheme(theme);
+        set({ theme: themeName });
+      },
 
       addApplication: (app) => set((state) => {
         const id = typeof crypto.randomUUID === 'function'
@@ -64,6 +71,23 @@ const useAppStore = create<AppState & AppActions>()(
     {
       name: 'candinow-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state?.theme) {
+          let themeName: string = state.theme;
+          if (themeName === 'professional') {
+            themeName = 'corporate';
+          } else if (themeName === 'minimal') {
+            themeName = 'classic';
+          }
+          
+          const theme = getTheme(themeName);
+          applyTheme(theme);
+          
+          if (themeName !== state.theme && (themeName === 'corporate' || themeName === 'classic')) {
+            state.theme = themeName;
+          }
+        }
+      },
     }
   )
 );

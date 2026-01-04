@@ -117,7 +117,7 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
   const sectionTitle = "text-xs font-black text-primary border-b border-primary-soft pb-2 mb-4 mt-8 first:mt-0 uppercase tracking-[0.15em]";
   const errorClasses = "text-[10px] text-danger font-bold mt-1 ml-1";
 
-  const selectClasses = "w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm appearance-none cursor-pointer";
+  const selectClasses = "w-full px-4 py-2 bg-background border border-border rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm text-foreground appearance-none cursor-pointer";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -186,7 +186,7 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
             <textarea
               {...register('description')}
               rows={4}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm resize-none"
+              className="w-full px-4 py-3 bg-background border border-border rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm text-foreground resize-none"
               placeholder="Description complète de l'offre d'emploi (importée automatiquement)"
             />
           </div>
@@ -253,13 +253,13 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
           <textarea 
             {...register('notes')}
             rows={4} 
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm resize-none"
+            className="w-full px-4 py-3 bg-background border border-border rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm text-foreground resize-none"
             placeholder="Points clés, questions à poser..."
           />
         </div>
       </div>
       
-      <div className="pt-4 flex gap-4 sticky bottom-0 bg-white border-t border-border/20 mt-auto">
+      <div className="pt-4 flex gap-4 sticky bottom-0 bg-background border-t border-border/20 mt-auto">
         <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Annuler
         </Button>

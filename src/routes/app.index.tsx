@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { STATUS_CONFIG } from '@/constants';
 import useAppStore from '@/stores/useStore';
-import type { AppStatus, JobApplication } from '@/types/JobApplication';
+import type { JobApplication } from '@/types/JobApplication';
 import { createFileRoute } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpDown, Filter, Flower2, Plus, RotateCcw, Search } from 'lucide-react';
@@ -84,7 +84,7 @@ function ApplicationsListPage() {
     setStatusFilter('all');
   };
 
-  const selectClasses = "appearance-none bg-white border border-border px-10 py-3.5 rounded-full text-[11px] font-black text-text-primary uppercase tracking-widest focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all outline-none cursor-pointer shadow-soft w-full sm:w-auto";
+  const selectClasses = "appearance-none bg-background border border-border px-10 py-3.5 rounded-full text-[11px] font-black text-text-primary uppercase tracking-widest focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all outline-none cursor-pointer shadow-soft w-full sm:w-auto";
 
   return (
     <div className="space-y-8 pb-32">
@@ -111,13 +111,23 @@ function ApplicationsListPage() {
                 <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-primary opacity-40 pointer-events-none" size={16} />
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as AppStatus | 'all')}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === 'all') {
+                      setStatusFilter('all');
+                    } else if (value === 'applied' || value === 'follow_up' || value === 'interview' || value === 'offer' || value === 'rejected' || value === 'ghosted') {
+                      setStatusFilter(value);
+                    }
+                  }}
                   className={selectClasses}
                 >
                   <option value="all">Tous les Statuts</option>
-                  {(Object.keys(STATUS_CONFIG) as (keyof typeof STATUS_CONFIG)[]).filter(k => k !== 'all').map((key) => (
-                    <option key={key} value={key}>{STATUS_CONFIG[key].label}</option>
-                  ))}
+                  {Object.keys(STATUS_CONFIG).filter(k => k !== 'all').map((key) => {
+                    const statusKey = key === 'applied' || key === 'follow_up' || key === 'interview' || key === 'offer' || key === 'rejected' || key === 'ghosted' ? key : 'applied';
+                    return (
+                      <option key={key} value={key}>{STATUS_CONFIG[statusKey].label}</option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -125,7 +135,12 @@ function ApplicationsListPage() {
                 <ArrowUpDown className="absolute left-4 top-1/2 -translate-y-1/2 text-primary opacity-40 pointer-events-none" size={16} />
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === 'newest' || value === 'oldest' || value === 'company' || value === 'title') {
+                      setSortBy(value);
+                    }
+                  }}
                   className={selectClasses}
                 >
                   <option value="newest">Plus récents</option>
@@ -151,7 +166,7 @@ function ApplicationsListPage() {
             </div>
             <div className="max-w-md space-y-2">
               <h3 className="text-2xl font-black text-text-primary tracking-tight">
-                {applications.length === 0 ? "Ton jardin est prêt à fleurir" : "Aucun résultat trouvé"}
+                {applications.length === 0 ? "Prêt à démarrer" : "Aucun résultat trouvé"}
               </h3>
               <p className="text-text-secondary font-semibold text-sm leading-relaxed">
                 {applications.length === 0

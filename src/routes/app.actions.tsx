@@ -293,7 +293,7 @@ const FilterButton = ({ label, count, isActive, onClick, variant = 'default' }: 
             : 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
           : variant === 'danger'
           ? 'bg-danger-soft/30 text-danger border-danger/20 hover:bg-danger-soft'
-          : 'bg-white text-text-secondary border-border hover:border-primary/30 hover:text-primary'
+          : 'bg-background text-text-secondary border-border hover:border-primary/30 hover:text-primary'
       }`}
     >
       {label} <span className="ml-1.5 opacity-70">({count})</span>
