@@ -144,7 +144,7 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
           </div>
           <div className="md:col-span-2">
             <label className={labelClasses}>Lien de l'offre</label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-start">
               <div className="flex-1">
                 <Input
                   {...register('jobLink')}
@@ -162,10 +162,10 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
               <Button
                 type="button"
                 variant="outline"
-                size="md"
+                size="sm"
                 onClick={handleImportFromLink}
                 disabled={isImporting || !jobLinkValue}
-                className="min-w-[120px] flex items-center gap-2"
+                className="min-w-[120px] flex items-center gap-2 shrink-0"
               >
                 {isImporting ? (
                   <>
