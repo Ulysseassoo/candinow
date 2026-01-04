@@ -66,22 +66,8 @@ export const TodaysActions = ({ applications, sendFollowUp, setViewingApp }: Pro
       />
 
       <div className="space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-warning-soft flex items-center justify-center">
-            <AlertCircle size={20} className="text-warning" />
-          </div>
-          <div>
-            <h2 className="font-black text-xl text-text-primary">
-              Actions du jour
-            </h2>
-            <p className="text-text-secondary text-sm">
-              {dueApplications.filter(app => !completedIds.has(app.id)).length} relance{dueApplications.filter(app => !completedIds.has(app.id)).length !== 1 ? 's' : ''} à effectuer
-            </p>
-          </div>
-        </div>
-
         <div className="space-y-3">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence initial={false}>
             {dueApplications.map((app, index) => (
               <FollowUpActionCard
                 key={app.id}
@@ -117,15 +103,23 @@ const FollowUpActionCard = ({ app, index, sendFollowUp, setViewingApp, isComplet
 
   return (
     <motion.div
+      layout
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: isCompleted ? 0.5 : 1,
         y: 0,
         scale: isCompleted ? 0.98 : 1
       }}
-      exit={{ opacity: 0, x: 100, scale: 0.95 }}
-      transition={{ delay: index * 0.1 }}
-      className={`soft-card p-5 hover:shadow-lg transition-all duration-200 border-l-4 ${
+      exit={{ opacity: 0, x: -30, scale: 0.95 }}
+      transition={{
+        layout: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+        opacity: { duration: 0.25 },
+        scale: { duration: 0.25 },
+        y: { duration: 0.3, delay: Math.min(index * 0.03, 0.15) },
+        // @ts-ignore
+        exit: { duration: 0.2, ease: "easeIn" }
+      }}
+      className={`soft-card p-5 hover:shadow-lg transition-shadow duration-200 border-l-4 ${
         isCompleted ? 'border-success bg-success-soft/20' : 'border-warning'
       }`}
     >

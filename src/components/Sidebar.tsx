@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion';
-import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles, MessageSquareHeart } from 'lucide-react';
+import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles, MessageSquareHeart, CheckSquare } from 'lucide-react';
 import { NavItem } from './NavItem';
 
 interface SidebarProps {
-  currentView: 'list' | 'dashboard' | 'settings' | 'feedback';
-  onViewChange: (view: 'list' | 'dashboard' | 'settings' | 'feedback') => void;
+  currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
+  onViewChange: (view: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions') => void;
   onLogoClick: () => void;
+  actionsDueCount?: number;
 }
 
-export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps) => {
+export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCount = 0 }: SidebarProps) => {
   return (
     <aside className="hidden lg:flex w-80 soft-card p-8 flex-col gap-12 sticky top-8 h-[calc(100vh-64px)]">
-      <motion.button 
+      <motion.button
         whileHover={{ scale: 1.02 }}
         onClick={onLogoClick}
         className="flex items-center gap-4 px-2 hover:opacity-80 transition-opacity text-left"
@@ -32,6 +33,14 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps
           label="Candidatures"
           isActive={currentView === 'list'}
           onClick={() => onViewChange('list')}
+        />
+        <NavItem
+          id="actions"
+          icon={CheckSquare}
+          label="Actions du jour"
+          isActive={currentView === 'actions'}
+          onClick={() => onViewChange('actions')}
+          badge={actionsDueCount}
         />
         <NavItem
           id="dashboard"
@@ -60,7 +69,7 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick }: SidebarProps
       </nav>
 
       <div className="mt-auto group">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-primary-soft p-6 rounded-ui border border-primary/10 relative overflow-hidden"

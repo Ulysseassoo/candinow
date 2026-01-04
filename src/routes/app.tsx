@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { createFileRoute, Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import useAppStore from '../stores/useStore';
 import { Sidebar } from '../components/Sidebar';
@@ -7,6 +7,7 @@ import { AppHeader } from '../components/AppHeader';
 import { getTodayISO } from '../lib/dateUtils';
 import moment from 'moment';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { getApplicationsDueToday } from '../lib/followUpUtils';
 
 export const Route = createFileRoute('/app')({
   component: AppLayout,
@@ -16,18 +17,23 @@ function AppLayout() {
   const navigate = useNavigate({ from: '/app' });
   const location = useLocation();
   const { applications } = useAppStore();
-  
+
   useOnlineStatus();
 
-  const getCurrentView = (): 'list' | 'dashboard' | 'settings' | 'feedback' => {
+  const getCurrentView = (): 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions' => {
     const path = location.pathname;
     if (path === '/app/dashboard') return 'dashboard';
     if (path === '/app/settings') return 'settings';
     if (path === '/app/feedback') return 'feedback';
+    if (path === '/app/actions') return 'actions';
     return 'list';
   };
 
   const currentView = getCurrentView();
+
+  const actionsDueCount = useMemo(() => {
+    return getApplicationsDueToday(applications).length;
+  }, [applications]);
 
   useEffect(() => {
     if (typeof Notification === 'undefined') {
@@ -55,7 +61,7 @@ function AppLayout() {
     checkReminders();
   }, [applications]);
 
-  const handleViewChange = (newView: 'list' | 'dashboard' | 'settings' | 'feedback') => {
+  const handleViewChange = (newView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions') => {
     if (newView === 'list') {
       navigate({ to: '/app' });
     } else {
@@ -69,14 +75,15 @@ function AppLayout() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row p-0 lg:p-8 gap-0 lg:gap-8 bg-[#FFF9FA]">
-      <Sidebar 
-        currentView={currentView} 
+      <Sidebar
+        currentView={currentView}
         onViewChange={handleViewChange}
         onLogoClick={handleLogoClick}
+        actionsDueCount={actionsDueCount}
       />
 
       <main className="flex-1 flex flex-col min-w-0 pb-28 lg:pb-0 p-4 md:p-8 lg:p-0">
-        <AppHeader 
+        <AppHeader
           currentView={currentView}
           onLogoClick={handleLogoClick}
         />
@@ -86,9 +93,10 @@ function AppLayout() {
         </div>
       </main>
 
-      <BottomNav 
+      <BottomNav
         currentView={currentView}
         onViewChange={handleViewChange}
+        actionsDueCount={actionsDueCount}
       />
     </div>
   );

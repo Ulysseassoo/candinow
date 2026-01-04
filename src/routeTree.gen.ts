@@ -15,6 +15,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppFeedbackRouteImport } from './routes/app.feedback'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppActionsRouteImport } from './routes/app.actions'
 
 const AppRoute = AppRouteImport.update({
   id: '/app',
@@ -46,10 +47,16 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppActionsRoute = AppActionsRouteImport.update({
+  id: '/actions',
+  path: '/actions',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/actions': typeof AppActionsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/feedback': typeof AppFeedbackRoute
   '/app/settings': typeof AppSettingsRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/actions': typeof AppActionsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/feedback': typeof AppFeedbackRoute
   '/app/settings': typeof AppSettingsRoute
@@ -66,6 +74,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/actions': typeof AppActionsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/feedback': typeof AppFeedbackRoute
   '/app/settings': typeof AppSettingsRoute
@@ -76,16 +85,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/app/actions'
     | '/app/dashboard'
     | '/app/feedback'
     | '/app/settings'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/dashboard' | '/app/feedback' | '/app/settings' | '/app'
+  to:
+    | '/'
+    | '/app/actions'
+    | '/app/dashboard'
+    | '/app/feedback'
+    | '/app/settings'
+    | '/app'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/app/actions'
     | '/app/dashboard'
     | '/app/feedback'
     | '/app/settings'
@@ -141,10 +158,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/actions': {
+      id: '/app/actions'
+      path: '/actions'
+      fullPath: '/app/actions'
+      preLoaderRoute: typeof AppActionsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppActionsRoute: typeof AppActionsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppFeedbackRoute: typeof AppFeedbackRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -152,6 +177,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppActionsRoute: AppActionsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppFeedbackRoute: AppFeedbackRoute,
   AppSettingsRoute: AppSettingsRoute,

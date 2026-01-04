@@ -14,7 +14,6 @@ import { ArrowUpDown, Filter, Flower2, Plus, RotateCcw, Search } from 'lucide-re
 import { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
 import { FloatingActionMenu } from '@/components/FloatingActionMenu';
-import { TodaysActions } from '@/components/TodaysActions';
 import { Pagination } from '@/components/Pagination';
 
 type SortOption = 'newest' | 'oldest' | 'company' | 'title';
@@ -33,7 +32,6 @@ function ApplicationsListPage() {
     addApplication,
     updateApplication,
     deleteApplication,
-    sendFollowUp
   } = useAppStore();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -61,7 +59,6 @@ function ApplicationsListPage() {
     });
   }, [applications, searchQuery, statusFilter, sortBy]);
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredAndSortedApps.length / itemsPerPage);
   const paginatedApps = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -69,17 +66,15 @@ function ApplicationsListPage() {
     return filteredAndSortedApps.slice(startIndex, endIndex);
   }, [filteredAndSortedApps, currentPage, itemsPerPage]);
 
-  // Reset to page 1 when filters change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
   const handleItemsPerPageChange = (items: number) => {
     setItemsPerPage(items);
-    setCurrentPage(1); // Reset to first page when changing items per page
+    setCurrentPage(1);
   };
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, statusFilter, sortBy]);
@@ -141,14 +136,6 @@ function ApplicationsListPage() {
           </>
         )}
       </motion.div>
-
-      {applications.length > 0 && (
-        <TodaysActions
-          applications={applications}
-          sendFollowUp={sendFollowUp}
-          setViewingApp={setViewingApp}
-        />
-      )}
 
       <AnimatePresence mode="wait">
         {filteredAndSortedApps.length === 0 ? (

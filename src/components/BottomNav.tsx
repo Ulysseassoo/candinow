@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
-import { LayoutDashboard, ListTodo, Settings as SettingsIcon, MessageSquareHeart } from 'lucide-react';
+import { LayoutDashboard, ListTodo, Settings as SettingsIcon, MessageSquareHeart, CheckSquare } from 'lucide-react';
 import { NavItem } from './NavItem';
 
 interface BottomNavProps {
-  currentView: 'list' | 'dashboard' | 'settings' | 'feedback';
-  onViewChange: (view: 'list' | 'dashboard' | 'settings' | 'feedback') => void;
+  currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
+  onViewChange: (view: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions') => void;
+  actionsDueCount?: number;
 }
 
-export const BottomNav = ({ currentView, onViewChange }: BottomNavProps) => {
+export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: BottomNavProps) => {
   return (
     <motion.nav
       initial={{ y: 120, opacity: 0 }}
@@ -22,6 +23,15 @@ export const BottomNav = ({ currentView, onViewChange }: BottomNavProps) => {
         isActive={currentView === 'list'}
         onClick={() => onViewChange('list')}
         variant="bottom"
+      />
+      <NavItem
+        id="actions"
+        icon={CheckSquare}
+        label="Actions"
+        isActive={currentView === 'actions'}
+        onClick={() => onViewChange('actions')}
+        variant="bottom"
+        badge={actionsDueCount}
       />
       <NavItem
         id="dashboard"

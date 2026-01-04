@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Flower2 } from 'lucide-react';
 
 interface AppHeaderProps {
-  currentView: 'list' | 'dashboard' | 'settings';
+  currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
   onLogoClick: () => void;
 }
 
@@ -12,12 +12,14 @@ export const AppHeader = ({ currentView, onLogoClick }: AppHeaderProps) => {
       case 'list': return 'Mes Candidatures';
       case 'dashboard': return 'Statistiques';
       case 'settings': return 'Gestion';
+      case 'feedback': return 'Ton avis';
+      case 'actions': return 'Actions du jour';
       default: return 'Mes Candidatures';
     }
   };
 
   return (
-    <motion.header 
+    <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="mb-6 lg:mb-10 flex items-center justify-between px-4 mt-4 lg:mt-0"
@@ -33,7 +35,7 @@ export const AppHeader = ({ currentView, onLogoClick }: AppHeaderProps) => {
         </div>
       </div>
 
-      <button 
+      <button
         onClick={onLogoClick}
         className="lg:hidden w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
       >
