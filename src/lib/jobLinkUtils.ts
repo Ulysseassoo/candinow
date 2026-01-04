@@ -19,7 +19,7 @@ export const importJobFromLink = async (url: string): Promise<JobLinkImportData>
 
   try {
     const response = await axios.post(
-      `${BACKEND_API_URL}/scrape`,
+      `${BACKEND_API_URL}/api/scrape`,
       { url },
       {
         headers: {
