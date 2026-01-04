@@ -137,5 +137,10 @@ export function getTheme(name: ThemeName | string): Theme {
   if (name === 'minimal') {
     return themes.classic;
   }
+
+  if (name in themes) {
+    return themes[name as ThemeName];
+  }
+
   return themes[defaultTheme];
 }

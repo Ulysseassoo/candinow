@@ -8,9 +8,9 @@ import { fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
-    devtools(),
+    mode === 'development' && devtools(),
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true,
@@ -65,10 +65,22 @@ export default defineConfig({
         ]
       }
     }),
-  ],
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['@tanstack/react-router'],
+          'ui-vendor': ['framer-motion', 'recharts'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+}))

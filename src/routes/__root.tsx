@@ -3,21 +3,25 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
+const isDevelopment = import.meta.env.DEV
+
 export const Route = createRootRoute({
   component: () => (
     <ThemeProvider>
       <Outlet />
-      <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-        ]}
-      />
+      {isDevelopment && (
+        <TanStackDevtools
+          config={{
+            position: 'bottom-right',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+      )}
     </ThemeProvider>
   ),
 })
