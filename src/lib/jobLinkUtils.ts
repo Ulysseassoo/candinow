@@ -11,10 +11,9 @@ export interface JobLinkImportData {
 }
 
 const BACKEND_API_URL = import.meta.env.VITE_BACKEND_API_URL;
-const BACKEND_API_KEY = import.meta.env.VITE_BACKEND_API_KEY;
 
 export const importJobFromLink = async (url: string): Promise<JobLinkImportData> => {
-  if (!BACKEND_API_URL || !BACKEND_API_KEY) {
+  if (!BACKEND_API_URL) {
     throw new Error('Configuration API manquante');
   }
 
@@ -25,7 +24,6 @@ export const importJobFromLink = async (url: string): Promise<JobLinkImportData>
       {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': BACKEND_API_KEY,
         },
       }
     );
