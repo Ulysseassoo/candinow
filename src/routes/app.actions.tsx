@@ -17,6 +17,7 @@ export const Route = createFileRoute('/app/actions')({
 function ActionsPage() {
   const { applications, addApplication, sendFollowUp } = useAppStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // @ts-ignore
   const [viewingApp, setViewingApp] = useState<JobApplication | null>(null);
   const [filterView, setFilterView] = useState<'all' | 'today' | 'overdue'>('all');
 

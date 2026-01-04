@@ -85,7 +85,7 @@ export const initializeFollowUpTracking = (
   return {
     followUpCount,
     lastActionDate,
-    nextFollowUpDate,
+    nextFollowUpDate: nextFollowUpDate ?? undefined,
     followUpStatus: nextFollowUpDate ? 'planned' : 'none'
   };
 };

@@ -20,7 +20,7 @@ export interface JobApplication {
     reminderAt?: string;
     followUpCount?: number;
     lastActionDate?: string;
-    nextFollowUpDate?: string;
+    nextFollowUpDate?: string | undefined;
 
     contactName?: string;
     contactEmail?: string;
