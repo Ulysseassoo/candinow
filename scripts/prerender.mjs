@@ -9,6 +9,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const distPath = join(__dirname, '../dist');
 const PORT = 5173;
 
+// Check if we're running on Vercel
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV;
+
 // Create a simple static file server
 function startServer() {
   const server = createServer((request, response) => {
@@ -35,10 +38,31 @@ async function prerender() {
   try {
     // Launch puppeteer
     console.log('Launching browser...');
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    let browser;
+    
+    if (isVercel) {
+      // On Vercel, use @sparticuz/chromium with puppeteer-core
+      const chromium = await import('@sparticuz/chromium');
+      const puppeteerCore = await import('puppeteer-core');
+      
+      // Configure Chromium for serverless environment
+      chromium.setGraphicsMode(false);
+      
+      browser = await puppeteerCore.default.launch({
+        args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      });
+      console.log('✓ Using @sparticuz/chromium for Vercel');
+    } else {
+      // Local development - use regular puppeteer
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      console.log('✓ Using local Puppeteer');
+    }
 
     const page = await browser.newPage();
 
@@ -66,7 +90,14 @@ async function prerender() {
 
   } catch (error) {
     console.error('Error during pre-rendering:', error);
-    process.exit(1);
+    // On Vercel, log the error but don't fail the build
+    // This allows the app to deploy even if pre-rendering fails
+    if (isVercel) {
+      console.warn('Pre-rendering failed on Vercel, but continuing build...');
+      console.warn('The app will work with client-side rendering');
+    } else {
+      process.exit(1);
+    }
   } finally {
     // Close the server
     server.close();
