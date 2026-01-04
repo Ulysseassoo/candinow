@@ -2,7 +2,6 @@
 import { 
   Flower2, 
   WifiOff, 
-  ShieldCheck, 
   Sparkles, 
   ArrowRight, 
   MousePointer2, 
@@ -11,8 +10,11 @@ import {
   Plus, 
   Clock, 
   CheckCircle2,
-  Building2
-} from 'lucide-react';
+  Building2,
+  AlertCircle,
+  XCircle,
+  Zap,
+  Ghost} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
@@ -109,6 +111,66 @@ export const Landing = () => {
             </Button>
           </motion.div>
         </motion.div>
+      </section>
+
+      <section id="problem" className="py-24 px-6 lg:px-20 bg-white">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-6"
+          >
+            <h2 className="text-4xl lg:text-5xl font-black text-text-primary tracking-tighter leading-tight">
+              Chercher un job, c'est déjà assez stressant.
+            </h2>
+            <p className="text-text-secondary font-medium text-lg leading-relaxed">
+              Pourquoi s'épuiser à gérer des tableaux complexes quand on devrait se concentrer sur l'essentiel : décrocher son prochain job.
+            </p>
+            <ul className="space-y-4 pt-4">
+              {[
+                { icon: XCircle, text: "Le désordre grandissant des fichiers Excel", color: "text-danger" },
+                { icon: AlertCircle, text: "L'oubli fatal d'une relance après 10 jours", color: "text-warning" },
+                { icon: Ghost, text: "La sensation de perdre le contrôle face au silence", color: "text-text-secondary" }
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-3 font-bold text-text-primary">
+                  <item.icon size={20} className={item.color} />
+                  {item.text}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+          <div className="grid grid-cols-2 gap-4">
+             <div className="space-y-4 mt-12">
+                <div className="soft-card p-6 bg-white rotate-2 hover:rotate-0 transition-transform shadow-lg shadow-black/5">
+                   <div className="w-10 h-10 bg-gray-50 rounded-xl mb-4" />
+                   <div className="h-2 w-20 bg-gray-100 rounded-full mb-2" />
+                   <div className="h-2 w-full bg-gray-50 rounded-full" />
+                </div>
+                <div className="soft-card p-6 bg-white -rotate-3 hover:rotate-0 transition-transform shadow-lg shadow-black/5">
+                   <div className="w-10 h-10 bg-danger-soft rounded-xl mb-4" />
+                   <div className="h-2 w-12 bg-danger-soft rounded-full mb-2" />
+                   <div className="h-2 w-full bg-gray-50 rounded-full" />
+                </div>
+             </div>
+             <div className="space-y-4">
+                <div className="soft-card p-6 bg-white -rotate-1 hover:rotate-0 transition-transform shadow-lg shadow-black/5">
+                   <div className="w-10 h-10 bg-primary-soft rounded-xl mb-4" />
+                   <div className="h-2 w-24 bg-primary-soft rounded-full mb-2" />
+                   <div className="h-2 w-full bg-gray-50 rounded-full" />
+                </div>
+                <div className="soft-card p-6 bg-white rotate-6 hover:rotate-0 transition-transform shadow-lg shadow-black/5 border-danger/20">
+                   <div className="flex justify-between items-start mb-4">
+                      <div className="w-10 h-10 bg-warning-soft rounded-xl" />
+                      <AlertCircle className="text-danger" size={16} />
+                   </div>
+                   <div className="h-2 w-16 bg-warning-soft rounded-full mb-2" />
+                   <div className="h-2 w-full bg-gray-50 rounded-full" />
+                </div>
+             </div>
+          </div>
+        </div>
       </section>
 
       <section id="preview" className="px-6 lg:px-20 py-24 relative overflow-hidden">
@@ -213,23 +275,38 @@ export const Landing = () => {
       </section>
 
       <section id="features" className="px-6 lg:px-20 py-24 bg-gray-50/30">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto text-center space-y-20">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="text-center mb-16 space-y-4"
+            className="space-y-4"
           >
-            <h2 className="text-3xl lg:text-5xl font-black text-text-primary tracking-tighter">Pensé pour votre confort</h2>
-            <p className="text-text-secondary font-bold uppercase text-xs tracking-widest">Simple. Privé. Puissant.</p>
+            <h2 className="text-4xl lg:text-6xl font-black text-text-primary tracking-tighter">Candinow te dit quoi faire.</h2>
+            <p className="text-text-secondary font-bold uppercase text-xs tracking-[0.3em]">L'intelligence au service de ta sérénité</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: WifiOff, title: "100% Offline", text: "Aucune connexion nécessaire. Vos données sont stockées localement.", color: "text-primary", bg: "bg-primary-soft" },
-              { icon: ShieldCheck, title: "Confidentialité", text: "Pas de compte, pas de tracking. Vous êtes le seul maître de vos données.", color: "text-accent", bg: "bg-accent/10" },
-              { icon: Layout, title: "Focus & Clarté", text: "Une interface pastel épurée pour éviter la surcharge cognitive.", color: "text-primary", bg: "bg-primary-soft" }
+              { 
+                icon: Layout, 
+                title: "Tout au même endroit", 
+                text: "Un tableau ultra-lisible qui centralise tes postes, entreprises et contacts sans fioritures.",
+                color: "text-primary"
+              },
+              { 
+                icon: Clock, 
+                title: "Relances intelligentes", 
+                text: "L'app détecte automatiquement quand une relance est due et te le signale visuellement.",
+                color: "text-accent"
+              },
+              { 
+                icon: Zap, 
+                title: "Zéro Configuration", 
+                text: "Pas de compte, pas de cloud, pas de formules Excel complexes. Tu ouvres, tu notes, c'est fait.",
+                color: "text-success"
+              }
             ].map((f, i) => (
               <motion.div 
                 key={i}
@@ -242,9 +319,9 @@ export const Landing = () => {
                   ease: [0.16, 1, 0.3, 1] 
                 }}
                 whileHover={{ y: -10, transition: { duration: 0.4 } }}
-                className="soft-card p-10 space-y-6 bg-white border-none shadow-xl shadow-black/5"
+                className="soft-card p-10 bg-white border-none shadow-xl shadow-black/5 text-left flex flex-col gap-6"
               >
-                <div className={`w-14 h-14 ${f.bg} rounded-2xl flex items-center justify-center ${f.color}`}>
+                <div className={`w-14 h-14 bg-white rounded-2xl flex items-center justify-center ${f.color} shadow-sm`}>
                   <f.icon size={28} />
                 </div>
                 <h3 className="text-xl font-black text-text-primary tracking-tight">{f.title}</h3>
