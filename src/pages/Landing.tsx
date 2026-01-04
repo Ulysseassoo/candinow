@@ -1,14 +1,14 @@
 
-import { 
-  Flower2, 
-  WifiOff, 
-  Sparkles, 
-  ArrowRight, 
-  MousePointer2, 
-  Layout, 
-  Search, 
-  Plus, 
-  Clock, 
+import {
+  Flower2,
+  WifiOff,
+  Sparkles,
+  ArrowRight,
+  MousePointer2,
+  Layout,
+  Search,
+  Plus,
+  Clock,
   CheckCircle2,
   Building2,
   AlertCircle,
@@ -18,10 +18,19 @@ import {
 import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
+import { Helmet } from 'react-helmet-async';
 import moment from 'moment';
 
 export const Landing = () => {
   const navigate = useNavigate();
+
+  const seoData = {
+    title: 'Candinow - Tracker de candidatures moderne et offline-first',
+    description: 'Organisez votre recherche d\'emploi sans stress. Candinow est un tracker de candidatures esthétique, 100% offline et gratuit. Suivez vos entretiens, relances et offres avec une interface pastel épurée.',
+    url: 'https://candinow.com',
+    image: 'https://candinow.com/logo512.png',
+    keywords: 'tracker candidatures, recherche emploi, suivi candidatures, job tracking, offline app, PWA, tracker job, candidatures France',
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -47,7 +56,62 @@ export const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col overflow-x-hidden">
+    <>
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="title" content={seoData.title} />
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+        <meta name="author" content="Candinow" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={seoData.url} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={seoData.url} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:image" content={seoData.image} />
+        <meta property="og:site_name" content="Candinow" />
+        <meta property="og:locale" content="fr_FR" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={seoData.url} />
+        <meta property="twitter:title" content={seoData.title} />
+        <meta property="twitter:description" content={seoData.description} />
+        <meta property="twitter:image" content={seoData.image} />
+
+        <meta name="theme-color" content="#FFB7C5" />
+        <meta name="application-name" content="Candinow" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Candinow" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebApplication',
+            name: 'Candinow',
+            description: seoData.description,
+            url: seoData.url,
+            applicationCategory: 'ProductivityApplication',
+            operatingSystem: 'All',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'EUR',
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '5.0',
+              ratingCount: '1',
+            },
+          })}
+        </script>
+      </Helmet>
+
+      <div className="min-h-screen bg-white flex flex-col overflow-x-hidden">
       <motion.header 
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -362,5 +426,6 @@ export const Landing = () => {
         </p>
       </footer>
     </div>
+    </>
   );
 };
