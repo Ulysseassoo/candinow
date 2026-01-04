@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "vite build && tsc && node scripts/prerender.mjs",
-    "build:no-prerender": "vite build && tsc",
+    "build": "vite build && tsc && node scripts/generate-static-files.mjs",
+    "build:local": "vite build && tsc && node scripts/prerender.mjs",
     "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "add:component": "bunx --bun shadcn@latest add",

@@ -1,19 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#FFB7C5" />
+
+    <title>Candinow - Tracker de Candidatures Moderne & Offline-First</title>
+    <meta
+      name="title"
+      content="Candinow - Tracker de Candidatures Moderne & Offline-First"
+    />
     <meta
       name="description"
+      content="Un tracker de candidatures moderne, offline-first, conçu pour la clarté et l'action. Suivez vos entretiens, relances et offres avec une interface pastel épurée. Gérez vos candidatures avec relances automatiques."
+    />
+    <meta name="keywords" content="tracker candidatures, job application tracker, suivi candidatures, recherche emploi, job search, offline-first, PWA" />
+    <meta name="author" content="Candinow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://candinow.com/" />
+    <meta property="og:title" content="Candinow - Tracker de Candidatures Moderne & Offline-First" />
+    <meta
+      property="og:description"
       content="Un tracker de candidatures moderne, offline-first, conçu pour la clarté et l'action. Suivez vos entretiens, relances et offres avec une interface pastel épurée."
     />
+    <meta property="og:image" content="https://candinow.com/logo512.png" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://candinow.com/" />
+    <meta property="twitter:title" content="Candinow - Tracker de Candidatures Moderne & Offline-First" />
+    <meta
+      property="twitter:description"
+      content="Un tracker de candidatures moderne, offline-first, conçu pour la clarté et l'action. Suivez vos entretiens, relances et offres avec une interface pastel épurée."
+    />
+    <meta property="twitter:image" content="https://candinow.com/logo512.png" />
+
     <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <title>Candinow</title>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Candinow",
+      "url": "https://candinow.com/",
+      "description": "Un tracker de candidatures moderne, offline-first, conçu pour la clarté et l'action. Suivez vos entretiens, relances et offres avec une interface pastel épurée.",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "featureList": [
+        "Suivi des candidatures",
+        "Relances automatiques",
+        "Dashboard statistiques",
+        "Mode offline",
+        "Export de données",
+        "Progressive Web App"
+      ]
+    }
+    </script>
   </head>
   <body>
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: system-ui, -apple-system, sans-serif;">
+        <h1>Candinow</h1>
+        <p>JavaScript est requis pour utiliser cette application.</p>
+        <p>Veuillez activer JavaScript dans votre navigateur pour continuer.</p>
+      </div>
+    </noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
