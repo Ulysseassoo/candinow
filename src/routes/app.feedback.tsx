@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { FeedbackForm } from '@/components/FeedbackForm';
 import { MessageSquareHeart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const Route = createFileRoute('/app/feedback')({
   component: FeedbackPage,
@@ -8,7 +9,11 @@ export const Route = createFileRoute('/app/feedback')({
 
 function FeedbackPage() {
   return (
-    <div className="max-w-2xl mx-auto pb-8">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="max-w-2xl mx-auto pb-8">
       <div className="soft-card p-8 lg:p-12">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -26,6 +31,6 @@ function FeedbackPage() {
 
         <FeedbackForm />
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -16,7 +16,7 @@ export const NavItem = ({ icon: Icon, label, isActive, onClick, variant = 'sideb
     return (
       <button
         onClick={onClick}
-        className={`flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-all duration-300 active:scale-90 relative ${
+        className={`flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-all duration-300 active:scale-90 relative cursor-pointer ${
           isActive ? 'text-primary' : 'text-text-secondary'
         }`}
       >
@@ -40,7 +40,7 @@ export const NavItem = ({ icon: Icon, label, isActive, onClick, variant = 'sideb
       whileHover={{ x: 5 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`flex items-center gap-3 px-6 py-4 rounded-full text-sm font-bold transition-all duration-500 w-full relative ${
+      className={`flex items-center gap-3 px-6 py-4 rounded-full text-sm font-bold transition-all duration-500 w-full relative cursor-pointer ${
         isActive
           ? 'bg-primary text-white shadow-lg shadow-primary/20'
           : 'text-text-secondary hover:bg-primary-soft hover:text-primary'
