@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export interface FeedbackData {
   name: string;
   type: 'feature' | 'bug' | 'love';
@@ -5,16 +7,17 @@ export interface FeedbackData {
 }
 
 export const sendFeedbackEmail = async (data: FeedbackData): Promise<void> => {
-  const response = await fetch('/api/feedback', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error('Erreur lors de l\'envoi du feedback');
+  try {
+    await axios.post('/api/feedback', data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.error || error.message || 'Erreur lors de l\'envoi du feedback';
+      throw new Error(errorMessage);
+    }
+    throw new Error('Erreur inconnue lors de l\'envoi du feedback');
   }
 };
-

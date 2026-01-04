@@ -28,6 +28,8 @@ export interface JobApplication {
     contactMethod?: ContactMethod;
 
     interviewDate?: string;
+    description?: string;
+    salary?: string;
     notes?: string;
 
     createdAt: string;

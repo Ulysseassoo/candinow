@@ -8,7 +8,8 @@ import { Button } from './ui/button';
 import {
   Building2, MapPin, Globe, Mail, Phone, Calendar,
   ExternalLink, StickyNote, User, Flower2,
-  BellRing, CheckCircle2, Timer, Send, AlertCircle, Clock
+  BellRing, CheckCircle2, Timer, Send, AlertCircle, Clock,
+  DollarSign, FileText, CalendarClock
 } from 'lucide-react';
 import useAppStore from '@/stores/useStore';
 import { getTodayISOString, getDaysSince, formatDateShort } from '@/lib/dateUtils';
@@ -285,24 +286,40 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
           <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">Détails du Poste</h3>
           {infoRow(<MapPin size={18} />, "Localisation", app.location)}
           {infoRow(<Globe size={18} />, "Domaine", app.domain)}
+          {infoRow(<Building2 size={18} />, "Source", app.source)}
+          {infoRow(<DollarSign size={18} />, "Salaire", app.salary)}
           {infoRow(<ExternalLink size={18} />, "Lien Offre", app.jobLink, true)}
         </div>
-        
+
         <div className="space-y-4">
-          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">Contact Clé</h3>
-          {infoRow(<User size={18} />, "Nom", app.contactName)}
+          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">Dates & Contact</h3>
+          {infoRow(<Calendar size={18} />, "Date de candidature", formatDateShort(app.appliedAt))}
+          {infoRow(<CalendarClock size={18} />, "Date d'entretien", app.interviewDate ? formatDateShort(app.interviewDate) : undefined)}
+          {infoRow(<User size={18} />, "Contact", app.contactName)}
           {infoRow(<Mail size={18} />, "Email", app.contactEmail)}
           {infoRow(<Phone size={18} />, "Téléphone", app.contactPhone)}
         </div>
       </div>
 
+      {app.description && (
+        <div className="bg-accent/10 p-8 rounded-ui border border-accent/20 space-y-4">
+          <div className="flex items-center gap-2 text-accent">
+            <FileText size={18} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Description de l'offre</span>
+          </div>
+          <p className="text-sm text-text-primary/90 font-medium leading-relaxed whitespace-pre-wrap">
+            {app.description}
+          </p>
+        </div>
+      )}
+
       {app.notes && (
         <div className="bg-warning-soft/20 p-8 rounded-ui border border-warning/10 italic text-text-primary/80 font-medium leading-relaxed shadow-inner">
           <div className="flex items-center gap-2 mb-4 text-warning">
             <StickyNote size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Réflexions</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Notes & Réflexions</span>
           </div>
-          "{app.notes}"
+          <p className="whitespace-pre-wrap">"{app.notes}"</p>
         </div>
       )}
 

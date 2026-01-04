@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,6 +8,8 @@ import { STATUS_CONFIG, FOLLOW_UP_CONFIG } from '@/constants';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { formatDateForInput, getTodayISO } from '@/lib/dateUtils';
+import { Download, Loader2 } from 'lucide-react';
+import { importJobFromLink } from '@/lib/jobLinkUtils';
 
 const appSchema = z.object({
   title: z.string().min(2, "L'intitulé est trop court"),
@@ -24,6 +27,8 @@ const appSchema = z.object({
   contactPhone: z.string().optional(),
   contactMethod: z.enum(['email', 'phone']),
   interviewDate: z.string().optional(),
+  description: z.string().optional(),
+  salary: z.string().optional(),
   notes: z.string().optional(),
   reminderAt: z.string().optional(),
 });
@@ -40,6 +45,8 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<AppFormValues>({
     resolver: zodResolver(appSchema),
@@ -55,6 +62,56 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
       contactMethod: 'email',
     },
   });
+
+  const [isImporting, setIsImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importSuccess, setImportSuccess] = useState(false);
+  const jobLinkValue = watch('jobLink');
+
+  const handleImportFromLink = async () => {
+    if (!jobLinkValue || jobLinkValue.trim() === '') {
+      setImportError('Veuillez entrer une URL');
+      return;
+    }
+
+    setIsImporting(true);
+    setImportError(null);
+    setImportSuccess(false);
+
+    try {
+      const importedData = await importJobFromLink(jobLinkValue);
+
+      if (importedData.title && !watch('title')) {
+        setValue('title', importedData.title);
+      }
+      if (importedData.company && !watch('company')) {
+        setValue('company', importedData.company);
+      }
+      if (importedData.location) {
+        setValue('location', importedData.location);
+      }
+      if (importedData.domain) {
+        setValue('domain', importedData.domain);
+      }
+      if (importedData.source) {
+        setValue('source', importedData.source);
+      }
+      if (importedData.description) {
+        setValue('description', importedData.description);
+      }
+      if (importedData.salary) {
+        setValue('salary', importedData.salary);
+      }
+
+      setImportSuccess(true);
+      setTimeout(() => setImportSuccess(false), 3000);
+
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'Erreur inconnue');
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   const labelClasses = "block text-[10px] font-black text-text-secondary uppercase tracking-widest mb-1.5 ml-1";
   const sectionTitle = "text-xs font-black text-primary border-b border-primary-soft pb-2 mb-4 mt-8 first:mt-0 uppercase tracking-[0.15em]";
@@ -87,8 +144,55 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
           </div>
           <div className="md:col-span-2">
             <label className={labelClasses}>Lien de l'offre</label>
-            <Input {...register('jobLink')} placeholder="https://linkedin.com/jobs/..." />
-            {errors.jobLink && <p className={errorClasses}>{errors.jobLink.message}</p>}
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  {...register('jobLink')}
+                  placeholder="https://linkedin.com/jobs/..."
+                  className={errors.jobLink ? 'border-danger/50 bg-danger-soft/10' : ''}
+                />
+                {errors.jobLink && <p className={errorClasses}>{errors.jobLink.message}</p>}
+                {importError && <p className={errorClasses}>{importError}</p>}
+                {importSuccess && (
+                  <p className="text-[10px] text-green-600 font-bold mt-1 ml-1">
+                    ✓ Données importées avec succès
+                  </p>
+                )}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                onClick={handleImportFromLink}
+                disabled={isImporting || !jobLinkValue}
+                className="min-w-[120px] flex items-center gap-2"
+              >
+                {isImporting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Import...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4" />
+                    Importer
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+          <div className="md:col-span-2">
+            <label className={labelClasses}>Description de l'offre</label>
+            <textarea
+              {...register('description')}
+              rows={4}
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm resize-none"
+              placeholder="Description complète de l'offre d'emploi (importée automatiquement)"
+            />
+          </div>
+          <div>
+            <label className={labelClasses}>Salaire</label>
+            <Input {...register('salary')} placeholder="ex: 45k - 55k€" />
           </div>
         </div>
 
