@@ -193,5 +193,5 @@ code {
 
 .hover-lift:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 50px -15px rgba(255, 183, 197, 0.3);
+  box-shadow: var(--shadow-colored, 0 20px 50px -15px rgba(0, 0, 0, 0.15));
 }

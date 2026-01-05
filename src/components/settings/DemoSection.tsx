@@ -19,11 +19,11 @@ export const DemoSection = ({ onGenerate, isLoading }: DemoSectionProps) => {
             <p className="text-text-secondary text-sm">Remplis l'application avec 50 candidatures pour tester le design.</p>
           </div>
         </div>
-        <Button 
+        <Button
           onClick={onGenerate}
           variant="primary"
           disabled={isLoading}
-          className="bg-accent hover:bg-accent/80 shadow-accent/20 whitespace-nowrap"
+          className="bg-accent hover:bg-accent/80 whitespace-nowrap"
         >
           <Sparkles size={16} className="mr-2" /> Générer 50 tests
         </Button>

@@ -22,6 +22,11 @@ export interface Theme {
     background: string;
     foreground: string;
   };
+  shadows: {
+    colored: string;
+    coloredLg: string;
+    coloredXl: string;
+  };
 }
 
 export const themes: Record<ThemeName, Theme> = {
@@ -47,6 +52,11 @@ export const themes: Record<ThemeName, Theme> = {
       background: '#FFFFFF',
       foreground: '#2D3142',
     },
+    shadows: {
+      colored: '0 20px 50px -15px rgba(255, 183, 197, 0.3)',
+      coloredLg: '0 40px 100px -20px rgba(255, 183, 197, 0.3)',
+      coloredXl: '0 15px 30px -5px rgba(255, 183, 197, 0.5)',
+    },
   },
   corporate: {
     name: 'corporate',
@@ -69,6 +79,11 @@ export const themes: Record<ThemeName, Theme> = {
       border: '#334155',
       background: '#0F172A',
       foreground: '#F1F5F9',
+    },
+    shadows: {
+      colored: '0 20px 50px -15px rgba(10, 102, 194, 0.2)',
+      coloredLg: '0 40px 100px -20px rgba(10, 102, 194, 0.25)',
+      coloredXl: '0 15px 30px -5px rgba(10, 102, 194, 0.3)',
     },
   },
   classic: {
@@ -93,6 +108,11 @@ export const themes: Record<ThemeName, Theme> = {
       background: '#1E1B4B',
       foreground: '#F1F5F9',
     },
+    shadows: {
+      colored: '0 20px 50px -15px rgba(99, 102, 241, 0.2)',
+      coloredLg: '0 40px 100px -20px rgba(99, 102, 241, 0.25)',
+      coloredXl: '0 15px 30px -5px rgba(99, 102, 241, 0.3)',
+    },
   },
 };
 
@@ -109,6 +129,11 @@ export function applyTheme(theme: Theme) {
 
     root.style.setProperty(tailwindVarName, value);
     root.style.setProperty(shadcnVarName, value);
+  });
+
+  Object.entries(theme.shadows).forEach(([key, value]) => {
+    const cssVarName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    root.style.setProperty(`--shadow-${cssVarName}`, value);
   });
 
   root.style.setProperty('--card', theme.colors.background);

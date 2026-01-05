@@ -29,7 +29,8 @@ export const FloatingActionMenu = ({ onAddClick }: FloatingActionMenuProps) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={onAddClick}
-          className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center shadow-[0_15px_30px_-5px_rgba(255,183,197,0.5)] transition-all"
+          className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg transition-all"
+          style={{ boxShadow: 'var(--shadow-colored-xl, 0 15px 30px -5px rgba(0, 0, 0, 0.2))' }}
           aria-label="Ajouter une candidature"
         >
           <Plus size={28} strokeWidth={2.5} />

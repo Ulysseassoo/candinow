@@ -27,10 +27,10 @@ export const ImportSection = ({ fileInputRef, onImport, onTriggerClick, isLoadin
         className="hidden" 
         accept=".json" 
       />
-      <Button 
+      <Button
         variant="primary"
         disabled={isLoading}
-        className="w-full bg-success hover:bg-success/80 shadow-success/20"
+        className="w-full bg-success hover:bg-success/80"
         onClick={onTriggerClick}
       >
         Importer JSON

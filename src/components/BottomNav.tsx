@@ -14,7 +14,8 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       initial={{ y: 120, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-      className="lg:hidden fixed bottom-6 inset-x-0 mx-auto w-[90%] max-w-md h-20 bg-background/90 backdrop-blur-lg border border-primary/10 rounded-[32px] shadow-[0_20px_50px_-10px_rgba(255,183,197,0.3)] flex items-center px-2 z-50"
+      className="lg:hidden fixed bottom-6 inset-x-0 mx-auto w-[90%] max-w-md h-20 bg-background/90 backdrop-blur-lg border border-primary/10 rounded-[32px] flex items-center px-2 z-50"
+      style={{ boxShadow: 'var(--shadow-colored, 0 20px 50px -10px rgba(0, 0, 0, 0.15))' }}
     >
       <NavItem
         id="list"

@@ -145,10 +145,10 @@ export const Landing = () => {
         className="p-8 lg:px-20 flex items-center justify-between z-50"
       >
         <div className="flex items-center gap-3">
-          <motion.div 
+          <motion.div
             whileHover={{ rotate: 15 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
-            className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20 transform -rotate-6 cursor-pointer"
+            className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-md transform -rotate-6 cursor-pointer"
           >
             <Flower2 size={24} />
           </motion.div>
@@ -281,7 +281,7 @@ export const Landing = () => {
           >
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[48px] blur-3xl opacity-30 group-hover:opacity-60 transition-opacity duration-1000 -z-10"></div>
             
-            <div className="bg-background rounded-[40px] shadow-[0_40px_100px_-20px_rgba(255,183,197,0.3)] border border-primary/30 overflow-hidden">
+            <div className="bg-background rounded-[40px] border border-primary/30 overflow-hidden" style={{ boxShadow: 'var(--shadow-colored-lg, 0 40px 100px -20px rgba(0, 0, 0, 0.15))' }}>
               <div className="bg-primary-soft/20 px-8 py-4 border-b border-border/50 flex items-center justify-between">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-200"></div>
@@ -344,10 +344,10 @@ export const Landing = () => {
             <motion.div 
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-6 -right-6 lg:-right-12 bg-accent/20 backdrop-blur-md p-6 rounded-[32px] border border-border/50 shadow-xl hidden lg:block"
+              className="absolute -bottom-6 -right-6 lg:-right-12 bg-accent/20 backdrop-blur-md p-6 rounded-[32px] border border-border/50 shadow-lg hidden lg:block"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-background rounded-2xl flex items-center justify-center text-accent shadow-sm">
+                <div className="w-12 h-12 bg-background rounded-2xl flex items-center justify-center text-accent">
                   <Clock size={24} />
                 </div>
                 <div>
@@ -386,9 +386,9 @@ export const Landing = () => {
                   ease: [0.16, 1, 0.3, 1] 
                 }}
                 whileHover={{ y: -10, transition: { duration: 0.4 } }}
-                className="soft-card p-10 bg-background border-none shadow-xl shadow-black/5 text-left flex flex-col gap-6"
+                className="soft-card p-10 bg-background border-none text-left flex flex-col gap-6"
               >
-                <div className={`w-14 h-14 bg-primary-soft/30 rounded-2xl flex items-center justify-center ${f.color} shadow-sm`}>
+                <div className={`w-14 h-14 bg-primary-soft/30 rounded-2xl flex items-center justify-center ${f.color}`}>
                   <f.icon size={28} />
                 </div>
                 <h3 className="text-xl font-black text-text-primary tracking-tight">{f.title}</h3>

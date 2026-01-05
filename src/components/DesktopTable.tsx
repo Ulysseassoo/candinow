@@ -34,7 +34,7 @@ const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, del
     };
 
     return (
-        <div className="hidden lg:block soft-card overflow-hidden border-none shadow-xl shadow-primary/5">
+        <div className="hidden lg:block soft-card overflow-hidden border-none shadow-lg">
             <table className="w-full text-left border-collapse">
                 <thead>
                     <tr className="bg-primary-soft/30 border-b border-border/40">
@@ -54,8 +54,7 @@ const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, del
                                 key={app.id}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                whileHover={{ backgroundColor: "rgba(255, 183, 197, 0.03)" }}
-                                className="group cursor-pointer transition-colors"
+                                className="group cursor-pointer transition-colors hover:bg-primary-soft/10"
                                 onClick={() => setViewingApp(app)}
                             >
                                 <td className="px-8 py-6">

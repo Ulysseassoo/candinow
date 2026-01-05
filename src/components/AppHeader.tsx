@@ -37,7 +37,7 @@ export const AppHeader = ({ currentView, onLogoClick }: AppHeaderProps) => {
 
       <button
         onClick={onLogoClick}
-        className="lg:hidden w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
+        className="lg:hidden w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-md"
       >
         <Flower2 size={24} />
       </button>

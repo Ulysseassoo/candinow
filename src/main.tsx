@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
@@ -31,6 +32,7 @@ if (rootElement && !rootElement.innerHTML) {
       <HelmetProvider>
         <RouterProvider router={router} />
         <Analytics />
+        <SpeedInsights />
       </HelmetProvider>
     </StrictMode>,
   )

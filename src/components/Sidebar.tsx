@@ -17,7 +17,7 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
         onClick={onLogoClick}
         className="flex items-center gap-4 px-2 hover:opacity-80 transition-opacity text-left cursor-pointer"
       >
-        <div className="w-14 h-14 bg-primary rounded-3xl flex items-center justify-center text-white shadow-xl shadow-primary/30 transform -rotate-6">
+        <div className="w-14 h-14 bg-primary rounded-3xl flex items-center justify-center text-white shadow-lg transform -rotate-6">
           <Flower2 size={32} />
         </div>
         <div>

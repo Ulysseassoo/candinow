@@ -42,7 +42,7 @@ export const NavItem = ({ icon: Icon, label, isActive, onClick, variant = 'sideb
       onClick={onClick}
       className={`flex items-center gap-3 px-6 py-4 rounded-full text-sm font-bold transition-all duration-500 w-full relative cursor-pointer ${
         isActive
-          ? 'bg-primary text-white shadow-lg shadow-primary/20'
+          ? 'bg-primary text-white shadow-md'
           : 'text-text-secondary hover:bg-primary-soft hover:text-primary'
       }`}
     >

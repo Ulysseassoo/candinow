@@ -289,8 +289,8 @@ const FilterButton = ({ label, count, isActive, onClick, variant = 'default' }: 
       className={`px-5 py-2.5 rounded-full text-sm font-black uppercase tracking-wider transition-all border-2 ${
         isActive
           ? variant === 'danger'
-            ? 'bg-danger text-white border-danger shadow-lg shadow-danger/20'
-            : 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
+            ? 'bg-danger text-white border-danger shadow-md'
+            : 'bg-primary text-white border-primary shadow-md'
           : variant === 'danger'
           ? 'bg-danger-soft/30 text-danger border-danger/20 hover:bg-danger-soft'
           : 'bg-background text-text-secondary border-border hover:border-primary/30 hover:text-primary'
