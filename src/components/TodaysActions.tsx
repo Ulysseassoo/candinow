@@ -96,6 +96,7 @@ interface FollowUpActionCardProps {
 }
 
 const FollowUpActionCard = ({ app, index, sendFollowUp, setViewingApp, isCompleted }: FollowUpActionCardProps) => {
+  const { t } = useTranslation();
   const daysSinceLastAction = app.lastActionDate
     ? getDaysSince(app.lastActionDate)
     : getDaysSince(app.appliedAt);
