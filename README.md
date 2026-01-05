@@ -1,301 +1,226 @@
-Welcome to your new TanStack app! 
+# Candinow 🚀
 
-# Getting Started
+> Un tracker de candidatures moderne, offline-first et privacy-first pour simplifier votre recherche d'emploi.
 
-To run this application:
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://candinow.com)
+[![Built with React](https://img.shields.io/badge/React-19-blue)](https://react.dev/)
+[![PWA Ready](https://img.shields.io/badge/PWA-ready-orange)](https://web.dev/progressive-web-apps/)
+[![License: Custom](https://img.shields.io/badge/License-Source--Available-yellow.svg)](LICENSE)
+
+![Candinow Banner](https://via.placeholder.com/1200x400/FFB7C5/2D3142?text=Candinow+-+Job+Application+Tracker)
+
+## ✨ Pourquoi Candinow ?
+
+La recherche d'emploi peut être stressante. Suivre ses candidatures dans un tableur Excel devient vite laborieux et inefficace. **Candinow** a été créé pour résoudre ce problème avec une solution simple, gratuite et respectueuse de vos données.
+
+### 🎯 Fonctionnalités principales
+
+- **📬 Relances automatiques intelligentes**
+  - Système d'escalade : 5 jours → 5 jours → 7 jours
+  - Statut "ghosted" automatique après 3 relances
+  - Vue dédiée "Actions du jour"
+
+- **📊 Dashboard avec statistiques**
+  - Répartition par statut (candidatures, entretiens, offres, rejets)
+  - Évolution temporelle de vos candidatures
+  - Statistiques par domaine d'activité
+
+- **💾 100% Offline & Privacy-First**
+  - Toutes vos données restent locales (localStorage)
+  - Aucun backend, aucun tracking
+  - Fonctionne entièrement hors ligne
+
+- **⚡ PWA Installable**
+  - Installez l'app sur votre ordinateur ou téléphone
+  - Notifications pour les relances (avec permission)
+  - Cache intelligent pour une performance optimale
+
+- **🎨 Personnalisation**
+  - 3 thèmes professionnels (Rose, Corporate, Classic)
+  - 2 dark modes pour réduire la fatigue oculaire
+  - Interface responsive mobile/tablet/desktop
+
+- **📥 Import/Export**
+  - Export JSON pour backup
+  - Export CSV pour analyse externe
+  - Import JSON pour restauration
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+
+- [Bun](https://bun.sh/) v1.0+ (recommandé) ou Node.js 18+
+- Git
+
+### Installation
 
 ```bash
+# Cloner le repo (si disponible publiquement)
+git clone https://github.com/username/candinow.git
+cd candinow
+
+# Installer les dépendances
 bun install
-bun --bun run start
+
+# Lancer le serveur de développement
+bun --bun run dev
 ```
 
-# Building For Production
+L'application sera disponible sur `http://localhost:3000`
 
-To build this application for production:
+### Build de production
 
 ```bash
-bun --bun run build
+# Build optimisé pour Vercel (recommandé)
+bun run build
+
+# Build local avec pre-rendering Puppeteer
+bun run build:local
+
+# Preview du build
+bun run preview
 ```
 
-## Testing
+## 💻 Stack technique
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+### Frontend
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **TanStack Router** - File-based routing avec code splitting
+- **Zustand** - State management avec persist middleware
+- **Tailwind CSS v4** - Styling avec @tailwindcss/vite
+- **Framer Motion** - Animations fluides
+- **Recharts** - Graphiques et visualisations
+- **shadcn/ui** - Composants UI réutilisables
+
+### Tooling
+- **Vite 7** - Build tool ultra-rapide
+- **Vitest** - Testing framework
+- **ESLint + Prettier** - Code quality
+
+### PWA
+- **vite-plugin-pwa** - Service Worker avec Workbox
+- **Web Vitals** - Mesures de performance
+
+### Deployment
+- **Vercel** - Hosting avec optimisations automatiques
+- **Resend** - Service email pour le feedback
+
+## 📁 Structure du projet
+
+```
+candinow/
+├── public/                 # Assets statiques
+├── scripts/               # Scripts de build
+│   ├── generate-static-files.mjs  # Sitemap & robots.txt
+│   └── prerender.mjs              # Pre-rendering Puppeteer
+├── src/
+│   ├── components/        # Composants React
+│   │   ├── ui/           # shadcn/ui components
+│   │   ├── dashboard/    # Dashboard components
+│   │   └── settings/     # Settings components
+│   ├── lib/              # Utilitaires
+│   │   ├── dateUtils.ts
+│   │   ├── followUpUtils.ts
+│   │   ├── themes.ts
+│   │   └── exportUtils.ts
+│   ├── routes/           # TanStack Router routes
+│   ├── stores/           # Zustand stores
+│   ├── types/            # TypeScript types
+│   └── main.tsx          # Entry point
+├── api/                  # Serverless functions (Vercel)
+│   └── feedback.ts
+└── package.json
+```
+
+## 🎨 Thèmes disponibles
+
+| Thème | Description | Type |
+|-------|-------------|------|
+| **Rose** | Palette pastel moderne et douce | Light |
+| **Corporate** | Dark mode professionnel (LinkedIn style) | Dark |
+| **Classic** | Dark mode sobre avec touches violettes | Dark |
+
+## 📝 Scripts disponibles
 
 ```bash
-bun --bun run test
+# Développement
+bun --bun run dev              # Serveur de dev (port 3000)
+
+# Build
+bun run build                  # Build production (Vercel)
+bun run build:local            # Build avec pre-rendering local
+bun run preview                # Preview du build
+
+# Qualité du code
+bun run lint                   # ESLint
+bun run format                 # Prettier
+bun run check                  # Format + Lint fix
+
+# Tests
+bun run test                   # Run tests avec Vitest
+
+# Composants
+bun run add:component          # Ajouter un composant shadcn/ui
 ```
 
-## Styling
+## 🔧 Configuration
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+### Variables d'environnement
 
+Pour activer le système de feedback par email :
 
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
-
-```bash
-bun --bun run lint
-bun --bun run format
-bun --bun run check
+```env
+RESEND_API_KEY=your_resend_api_key
+RESEND_EMAIL_TO=your@email.com
+VITE_BACKEND_API_URL=yourbackendapi.com
 ```
 
+### Service Worker
 
+Le service worker gère automatiquement :
+- Cache des assets (JS, CSS, HTML, images)
+- Stratégie Network-Only pour les API routes
+- Fallback vers index.html pour les routes SPA
 
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+### Guidelines
 
-### Adding A Route
+- Respectez la structure du code existante
+- Ajoutez des tests pour les nouvelles fonctionnalités
+- Mettez à jour la documentation si nécessaire
+- Suivez les conventions TypeScript
 
-To add a new route to your application just add another a new file in the `./src/routes` directory.
+## 📄 Licence
 
-TanStack will automatically generate the content of the route file for you.
+Ce projet utilise une **licence personnalisée "Source-Available"**.
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+### ✅ Vous pouvez :
+- Consulter et étudier le code source
+- Utiliser l'application sur [candinow.com](https://candinow.com)
+- Fork le repo pour apprendre
+- Soumettre des pull requests et contribuer
 
-### Adding Links
+### ❌ Vous ne pouvez pas (sans permission écrite) :
+- Utiliser le code à des fins commerciales
+- Redistribuer ou publier des versions modifiées
+- Héberger votre propre instance de Candinow
+- Utiliser le code dans des projets commerciaux ou propriétaires
 
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
+### 💼 Licence commerciale
 
-```tsx
-import { Link } from "@tanstack/react-router";
-```
+Pour un usage commercial, déploiement en entreprise, ou solutions white-label, contactez : **assooulysse@gmail.com**
 
-Then anywhere in your JSX you can use it like so:
+Voir le fichier [LICENSE](LICENSE) pour tous les détails légaux.
 
-```tsx
-<Link to="/about">About</Link>
-```
+## 👨‍💻 Auteur
 
-This will create a link that will navigate to the `/about` route.
+**Ulysse**
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+- 🌐 [Site web](https://candinow.com)
+- 📧 [Email](mailto:assooulysse@gmail.com)
 
-### Using A Layout
+---
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-bun install @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-bun install @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+<p align="center">
+  <em>Si ce projet vous aide dans votre recherche d'emploi, n'hésitez pas à le partager ! 🚀</em>
+</p>
