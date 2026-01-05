@@ -8,6 +8,7 @@ import { getDaysSince, formatDateShort } from "@/lib/dateUtils";
 import { Badge } from "./Badge";
 import { STATUS_CONFIG } from "@/constants";
 import { Toast } from "./Toast";
+import { useTranslation } from "@/lib/i18n/context";
 
 interface Props {
   applications: JobApplication[];
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const TodaysActions = ({ applications, sendFollowUp, setViewingApp }: Props) => {
+  const { t } = useTranslation();
   const dueApplications = getApplicationsDueToday(applications);
   const [toastMessage, setToastMessage] = useState<string>("");
   const [showToast, setShowToast] = useState(false);
@@ -30,8 +32,8 @@ export const TodaysActions = ({ applications, sendFollowUp, setViewingApp }: Pro
 
     setToastMessage(
       willBeGhosted
-        ? `✓ 3ème relance envoyée pour ${app.company}. Candidature marquée comme "ghosted".`
-        : `✓ Relance ${nextCount}/3 envoyée pour ${app.company}. Prochaine relance prévue automatiquement.`
+        ? t('app.todayFollowUpSent', { count: nextCount, company: app.company })
+        : t('app.todayFollowUpSentNext', { count: nextCount, company: app.company })
     );
     setShowToast(true);
   };
@@ -45,10 +47,10 @@ export const TodaysActions = ({ applications, sendFollowUp, setViewingApp }: Pro
           </div>
           <div>
             <h3 className="font-black text-lg text-text-primary mb-2">
-              Aucune action requise aujourd'hui
+              {t('app.todayNoActionRequired')}
             </h3>
             <p className="text-text-secondary text-sm">
-              Toutes vos relances sont à jour. Bon travail!
+              {t('app.todayAllUpToDate')}
             </p>
           </div>
         </div>
@@ -157,7 +159,7 @@ const FollowUpActionCard = ({ app, index, sendFollowUp, setViewingApp, isComplet
               {daysSinceLastAction}j
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-primary-soft text-primary rounded-full text-[10px] font-black uppercase tracking-tighter border border-primary/10">
-              Relance {followUpCount + 1}/3
+              {t('app.detailFollowUpCount', { count: followUpCount + 1 })}
             </div>
           </div>
         </div>
@@ -175,10 +177,10 @@ const FollowUpActionCard = ({ app, index, sendFollowUp, setViewingApp, isComplet
           {isCompleted ? (
             <>
               <CheckCircle size={16} className="mr-2" />
-              Envoyée!
+              {t('app.detailSent')}
             </>
           ) : (
-            'Relance envoyée'
+            t('app.detailFollowUpSent')
           )}
         </Button>
       </div>
@@ -187,7 +189,7 @@ const FollowUpActionCard = ({ app, index, sendFollowUp, setViewingApp, isComplet
         <div className="mt-3 pt-3 border-t border-border/20">
           <p className="text-xs text-danger font-semibold flex items-center gap-1.5">
             <AlertCircle size={12} />
-            En retard de {Math.abs(daysUntil!)} jour{Math.abs(daysUntil!) > 1 ? 's' : ''}
+            {t('common.time.lateDays', { count: Math.abs(daysUntil!) })}
           </p>
         </div>
       )}

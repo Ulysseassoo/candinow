@@ -15,6 +15,7 @@ import useAppStore from '@/stores/useStore';
 import { getTodayISOString, getDaysSince, formatDateShort } from '@/lib/dateUtils';
 import { getDaysUntilFollowUp, isFollowUpDue, shouldStopFollowUps } from '@/lib/followUpUtils';
 import { Toast } from './Toast';
+import { useTranslation } from '@/lib/i18n/context';
 
 const FOLLOW_UP_STEPS = [0, 1, 2];
 
@@ -25,6 +26,7 @@ interface ApplicationDetailProps {
 }
 
 export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: ApplicationDetailProps) => {
+  const { t } = useTranslation();
   const { applications, updateApplication, sendFollowUp } = useAppStore();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -47,8 +49,8 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
 
     setToastMessage(
       willBeGhosted
-        ? `✓ 3ème relance envoyée! Candidature marquée comme "ghosted".`
-        : `✓ Relance ${nextCount}/3 envoyée! Prochaine relance prévue dans ${nextCount === 1 ? '5 jours' : '7 jours'}.`
+        ? t('app.todayFollowUpSent', { count: nextCount, company: app.company })
+        : t('app.todayFollowUpSentNext', { count: nextCount, company: app.company })
     );
     setShowToast(true);
   };
@@ -123,9 +125,9 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
                 <Clock size={20} className="text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-text-primary">Prochaine relance automatique</h3>
+                <h3 className="text-sm font-black text-text-primary">{t('app.detailNextFollowUp')}</h3>
                 <p className="text-xs text-text-secondary font-medium">
-                  Relance {(app.followUpCount ?? 0) + 1} sur 3
+                  {t('app.detailFollowUpCount', { count: (app.followUpCount ?? 0) + 1 })}
                 </p>
               </div>
             </div>
@@ -140,14 +142,14 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
                   return (
                     <p className="text-xs font-black text-danger flex items-center gap-1 justify-end">
                       <AlertCircle size={12} />
-                      En retard de {Math.abs(daysUntil)}j
+                      {t('common.time.lateDays', { count: Math.abs(daysUntil) })}
                     </p>
                   );
                 }
                 if (daysUntil === 0) {
-                  return <p className="text-xs font-black text-warning">Aujourd'hui</p>;
+                  return <p className="text-xs font-black text-warning">{t('common.time.today')}</p>;
                 }
-                return <p className="text-xs font-black text-primary">Dans {daysUntil}j</p>;
+                return <p className="text-xs font-black text-primary">{t('common.time.inDays', { count: daysUntil })}</p>;
               })()}
             </div>
           </div>
@@ -193,7 +195,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
               className="w-full bg-primary text-white hover:bg-primary/90 font-bold flex items-center justify-center gap-2"
             >
               <Send size={16} />
-              Marquer la relance comme envoyée
+              {t('app.detailMarkSent')}
             </Button>
           )}
         </motion.div>
@@ -209,9 +211,9 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
           <div className="flex items-center gap-3 text-text-secondary">
             <AlertCircle size={20} />
             <div>
-              <h3 className="text-sm font-black">Application sans réponse</h3>
+              <h3 className="text-sm font-black">{t('app.detailNoResponse')}</h3>
               <p className="text-xs font-medium">
-                3 relances envoyées sans retour. Cette candidature a été marquée comme abandonnée.
+                {t('app.detailGhostedMessage')}
               </p>
             </div>
           </div>
@@ -222,7 +224,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
             <BellRing size={20} className="text-primary" />
-            <h3 className="text-[12px] font-black text-text-primary uppercase tracking-widest">Tracking Relance</h3>
+            <h3 className="text-[12px] font-black text-text-primary uppercase tracking-widest">{t('app.detailFollowUpTracking')}</h3>
           </div>
           {app.followUpStatus && app.followUpStatus !== 'none' && (
             <Badge 
@@ -238,7 +240,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
           <div className="p-5 bg-danger-soft/30 border border-danger/10 rounded-inner flex items-center justify-between">
             <div className="flex items-center gap-3 text-danger">
               <Timer size={24} />
-              <p className="text-xs font-bold italic">Plus de 10 jours sans réponse ! C'est le moment idéal pour relancer.</p>
+              <p className="text-xs font-bold italic">{t('app.detailOver10Days')}</p>
             </div>
             <Button 
               variant="danger"
@@ -246,7 +248,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
               onClick={() => handleUpdateFollowUp('contacted')}
               className="hover:scale-105"
             >
-              Relancer maintenant
+              {t('app.detailSendFollowUpNow')}
             </Button>
           </div>
         )}
@@ -257,49 +259,49 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
             className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'planned' ? 'bg-accent/10 border-accent text-accent' : 'bg-background border-border/40 text-text-secondary hover:border-accent/40'}`}
           >
             <Calendar size={20} />
-            <span className="text-[9px] font-black uppercase tracking-tighter">Planifiée</span>
+            <span className="text-[9px] font-black uppercase tracking-tighter">{t('app.detailPlanned')}</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('contacted')}
             className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'contacted' ? 'bg-primary-soft border-primary text-primary-dark' : 'bg-background border-border/40 text-text-secondary hover:border-primary/40'}`}
           >
             <Send size={20} />
-            <span className="text-[9px] font-black uppercase tracking-tighter">Contacté</span>
+            <span className="text-[9px] font-black uppercase tracking-tighter">{t('app.detailContacted')}</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('awaiting')}
             className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'awaiting' ? 'bg-warning-soft border-warning text-warning' : 'bg-background border-border/40 text-text-secondary hover:border-warning/40'}`}
           >
             <Timer size={20} />
-            <span className="text-[9px] font-black uppercase tracking-tighter">Attente</span>
+            <span className="text-[9px] font-black uppercase tracking-tighter">{t('app.detailAwaiting')}</span>
           </button>
           <button 
             onClick={() => handleUpdateFollowUp('responded')}
             className={`flex flex-col items-center justify-center p-4 rounded-inner border-2 transition-all gap-2 ${app.followUpStatus === 'responded' ? 'bg-success-soft border-success text-success' : 'bg-background border-border/40 text-text-secondary hover:border-success/40'}`}
           >
             <CheckCircle2 size={20} />
-            <span className="text-[9px] font-black uppercase tracking-tighter">Réponse</span>
+            <span className="text-[9px] font-black uppercase tracking-tighter">{t('app.detailResponse')}</span>
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-4">
-          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">Détails du Poste</h3>
-          {infoRow(<MapPin size={18} />, "Localisation", app.location)}
-          {infoRow(<Globe size={18} />, "Domaine", app.domain)}
-          {infoRow(<Building2 size={18} />, "Source", app.source)}
-          {infoRow(<DollarSign size={18} />, "Salaire", app.salary)}
-          {infoRow(<ExternalLink size={18} />, "Lien Offre", app.jobLink, true)}
+          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">{t('app.detailJobDetails')}</h3>
+          {infoRow(<MapPin size={18} />, t('app.detailLocation'), app.location)}
+          {infoRow(<Globe size={18} />, t('app.detailDomain'), app.domain)}
+          {infoRow(<Building2 size={18} />, t('app.detailSource'), app.source)}
+          {infoRow(<DollarSign size={18} />, t('app.detailSalary'), app.salary)}
+          {infoRow(<ExternalLink size={18} />, t('app.detailOfferLink'), app.jobLink, true)}
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">Dates & Contact</h3>
-          {infoRow(<Calendar size={18} />, "Date de candidature", formatDateShort(app.appliedAt))}
-          {infoRow(<CalendarClock size={18} />, "Date d'entretien", app.interviewDate ? formatDateShort(app.interviewDate) : undefined)}
-          {infoRow(<User size={18} />, "Contact", app.contactName)}
-          {infoRow(<Mail size={18} />, "Email", app.contactEmail)}
-          {infoRow(<Phone size={18} />, "Téléphone", app.contactPhone)}
+          <h3 className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">{t('app.detailDatesContact')}</h3>
+          {infoRow(<Calendar size={18} />, t('app.detailAppliedDate'), formatDateShort(app.appliedAt))}
+          {infoRow(<CalendarClock size={18} />, t('app.detailInterviewDate'), app.interviewDate ? formatDateShort(app.interviewDate) : undefined)}
+          {infoRow(<User size={18} />, t('app.detailContact'), app.contactName)}
+          {infoRow(<Mail size={18} />, t('app.detailEmail'), app.contactEmail)}
+          {infoRow(<Phone size={18} />, t('app.detailPhone'), app.contactPhone)}
         </div>
       </div>
 
@@ -307,7 +309,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         <div className="bg-accent/10 p-8 rounded-ui border border-accent/20 space-y-4">
           <div className="flex items-center gap-2 text-accent">
             <FileText size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Description de l'offre</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">{t('app.detailOfferDescription')}</span>
           </div>
           <p className="text-sm text-text-primary/90 font-medium leading-relaxed whitespace-pre-wrap">
             {app.description}
@@ -319,7 +321,7 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
         <div className="bg-warning-soft/20 p-8 rounded-ui border border-warning/10 italic text-text-primary/80 font-medium leading-relaxed shadow-inner">
           <div className="flex items-center gap-2 mb-4 text-warning">
             <StickyNote size={18} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Notes & Réflexions</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">{t('app.detailNotes')}</span>
           </div>
           <p className="whitespace-pre-wrap">"{app.notes}"</p>
         </div>
@@ -327,10 +329,10 @@ export const ApplicationDetail = ({ app: initialApp, onEdit, onClose }: Applicat
 
       <div className="flex gap-4 pt-6">
         <Button variant="outline" onClick={onClose} className="flex-1">
-          Fermer
+          {t('app.detailClose')}
         </Button>
         <Button onClick={onEdit} className="flex-[2]">
-          Modifier les détails
+          {t('app.detailEdit')}
         </Button>
       </div>
       </div>

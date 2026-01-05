@@ -6,6 +6,7 @@ import type { JobApplication } from '../types/JobApplication';
 import { getTodayISOString } from '../lib/dateUtils';
 import { initializeFollowUpTracking, handleFollowUpSent } from '../lib/followUpUtils';
 import { defaultTheme, getTheme, applyTheme } from '../lib/themes';
+import { detectBrowserLanguage } from '../lib/i18n/config';
 
 const useAppStore = create<AppState & AppActions>()(
   persist(
@@ -16,6 +17,7 @@ const useAppStore = create<AppState & AppActions>()(
       statusFilter: 'all',
       isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
       theme: defaultTheme,
+      language: detectBrowserLanguage(),
 
       setView: (view) => set({ view }),
       setSearchQuery: (searchQuery) => set({ searchQuery }),
@@ -26,6 +28,7 @@ const useAppStore = create<AppState & AppActions>()(
         applyTheme(theme);
         set({ theme: themeName });
       },
+      setLanguage: (language) => set({ language }),
 
       addApplication: (app) => set((state) => {
         const id = typeof crypto.randomUUID === 'function'

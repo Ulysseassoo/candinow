@@ -15,6 +15,7 @@ import { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
 import { FloatingActionMenu } from '@/components/FloatingActionMenu';
 import { Pagination } from '@/components/Pagination';
+import { useTranslation } from '@/lib/i18n/context';
 
 type SortOption = 'newest' | 'oldest' | 'company' | 'title';
 
@@ -23,6 +24,7 @@ export const Route = createFileRoute('/app/')({
 });
 
 function ApplicationsListPage() {
+  const { t } = useTranslation();
   const {
     applications,
     searchQuery,
@@ -99,7 +101,7 @@ function ApplicationsListPage() {
             <div className="relative group">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-text-secondary/40 group-focus-within:text-primary transition-colors" size={20} />
               <Input
-                placeholder="Rechercher un poste ou une entreprise..."
+                placeholder={t('app.searchPlaceholder')}
                 className="pl-14 py-5"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -121,7 +123,7 @@ function ApplicationsListPage() {
                   }}
                   className={selectClasses}
                 >
-                  <option value="all">Tous les Statuts</option>
+                  <option value="all">{t('app.allStatuses')}</option>
                   {Object.keys(STATUS_CONFIG).filter(k => k !== 'all').map((key) => {
                     const statusKey = key === 'applied' || key === 'follow_up' || key === 'interview' || key === 'offer' || key === 'rejected' || key === 'ghosted' ? key : 'applied';
                     return (
@@ -143,8 +145,8 @@ function ApplicationsListPage() {
                   }}
                   className={selectClasses}
                 >
-                  <option value="newest">Plus récents</option>
-                  <option value="company">Entreprise (A-Z)</option>
+                  <option value="newest">{t('app.sortMostRecent')}</option>
+                  <option value="company">{t('app.sortCompanyAZ')}</option>
                 </select>
               </div>
             </div>
@@ -166,21 +168,21 @@ function ApplicationsListPage() {
             </div>
             <div className="max-w-md space-y-2">
               <h3 className="text-2xl font-black text-text-primary tracking-tight">
-                {applications.length === 0 ? "Prêt à démarrer" : "Aucun résultat trouvé"}
+                {applications.length === 0 ? t('app.emptyStateTitle') : t('app.noResultsTitle')}
               </h3>
               <p className="text-text-secondary font-semibold text-sm leading-relaxed">
                 {applications.length === 0
-                  ? "Commence à suivre tes candidatures pour ne rater aucune opportunité."
-                  : "Ajuste tes filtres pour retrouver tes candidatures."}
+                  ? t('app.emptyStateDescription')
+                  : t('app.noResultsDescription')}
               </p>
             </div>
             {applications.length === 0 ? (
               <Button size="lg" onClick={() => setIsAddModalOpen(true)}>
-                <Plus size={18} className="mr-2" /> Ajouter ma première candidature
+                <Plus size={18} className="mr-2" /> {t('app.emptyStateButton')}
               </Button>
             ) : (
               <Button variant="outline" size="lg" onClick={handleResetFilters}>
-                <RotateCcw size={16} className="mr-2" /> Réinitialiser
+                <RotateCcw size={16} className="mr-2" /> {t('app.resetFilters')}
               </Button>
             )}
           </motion.div>
@@ -212,13 +214,13 @@ function ApplicationsListPage() {
         onAddClick={() => setIsAddModalOpen(true)}
       />
 
-      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Nouvelle candidature">
+      <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title={t('app.modalNewApplication')}>
         <AppForm onSubmit={(data) => { addApplication(data); setIsAddModalOpen(false); }} onCancel={() => setIsAddModalOpen(false)} />
       </Modal>
-      <Modal isOpen={!!editingApp} onClose={() => setEditingApp(null)} title="Modifier">
+      <Modal isOpen={!!editingApp} onClose={() => setEditingApp(null)} title={t('app.modalEdit')}>
         {editingApp && <AppForm initialData={editingApp} onSubmit={(data) => { updateApplication(editingApp.id, data); setEditingApp(null); }} onCancel={() => setEditingApp(null)} />}
       </Modal>
-      <Modal isOpen={!!viewingApp} onClose={() => setViewingApp(null)} title="Détails">
+      <Modal isOpen={!!viewingApp} onClose={() => setViewingApp(null)} title={t('app.modalDetails')}>
         {viewingApp && <ApplicationDetail app={viewingApp} onClose={() => setViewingApp(null)} onEdit={() => { setEditingApp(viewingApp); setViewingApp(null); }} />}
       </Modal>
     </div>

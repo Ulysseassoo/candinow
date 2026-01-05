@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { LayoutDashboard, ListTodo, Settings as SettingsIcon, Flower2, Sparkles, MessageSquareHeart, CheckSquare } from 'lucide-react';
 import { NavItem } from './NavItem';
+import { useTranslation } from '@/lib/i18n/context';
 
 interface SidebarProps {
   currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
@@ -10,6 +11,8 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCount = 0 }: SidebarProps) => {
+  const { t } = useTranslation();
+
   return (
     <aside className="hidden lg:flex w-80 soft-card p-8 flex-col gap-12 sticky top-8 h-[calc(100vh-64px)]">
       <motion.button
@@ -21,8 +24,8 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
           <Flower2 size={32} />
         </div>
         <div>
-          <span className="text-2xl font-extrabold text-text-primary tracking-tight block leading-none">Candinow</span>
-          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 block">Candinow</span>
+          <span className="text-2xl font-extrabold text-text-primary tracking-tight block leading-none">{t('nav.appName')}</span>
+          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 block">{t('nav.tagline')}</span>
         </div>
       </motion.button>
 
@@ -30,14 +33,14 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
         <NavItem
           id="list"
           icon={ListTodo}
-          label="Candidatures"
+          label={t('nav.list')}
           isActive={currentView === 'list'}
           onClick={() => onViewChange('list')}
         />
         <NavItem
           id="actions"
           icon={CheckSquare}
-          label="Actions du jour"
+          label={t('nav.actions')}
           isActive={currentView === 'actions'}
           onClick={() => onViewChange('actions')}
           badge={actionsDueCount}
@@ -45,14 +48,14 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
         <NavItem
           id="dashboard"
           icon={LayoutDashboard}
-          label="Dashboard"
+          label={t('nav.dashboard')}
           isActive={currentView === 'dashboard'}
           onClick={() => onViewChange('dashboard')}
         />
         <NavItem
           id="settings"
           icon={SettingsIcon}
-          label="Paramètres"
+          label={t('nav.settings')}
           isActive={currentView === 'settings'}
           onClick={() => onViewChange('settings')}
         />
@@ -62,7 +65,7 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
         <NavItem
           id="feedback"
           icon={MessageSquareHeart}
-          label="Ton avis"
+          label={t('nav.feedback')}
           isActive={currentView === 'feedback'}
           onClick={() => onViewChange('feedback')}
         />
@@ -79,10 +82,10 @@ export const Sidebar = ({ currentView, onViewChange, onLogoClick, actionsDueCoun
           </div>
           <div className="flex items-center gap-2 text-primary-dark mb-3">
             <Sparkles size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Conseil</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">{t('app.sidebarTip')}</span>
           </div>
           <p className="text-xs text-text-primary/70 leading-relaxed font-semibold relative z-10">
-            Chaque "non" te rapproche d'un "oui" épanouissant. Garde ton élan !
+            {t('nav.motivationQuote')}
           </p>
         </motion.div>
       </div>

@@ -8,6 +8,7 @@ import { getTodayISO } from '../lib/dateUtils';
 import moment from 'moment';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { getApplicationsDueToday } from '../lib/followUpUtils';
+import { useTranslation } from '../lib/i18n/context';
 
 export const Route = createFileRoute('/app')({
   component: AppLayout,
@@ -17,6 +18,7 @@ function AppLayout() {
   const navigate = useNavigate({ from: '/app' });
   const location = useLocation();
   const { applications } = useAppStore();
+  const { t } = useTranslation();
 
   useOnlineStatus();
 
@@ -49,8 +51,8 @@ function AppLayout() {
       applications.forEach(app => {
         if (app.reminderAt && moment(app.reminderAt).isSameOrBefore(today, 'day') && app.followUpStatus !== 'done' && app.followUpStatus !== 'responded') {
           if (Notification.permission === 'granted') {
-            new Notification('Candinow - Rappel Relance', {
-              body: `Il est temps de relancer ta candidature chez ${app.company} pour le poste de ${app.title}.`,
+            new Notification(t('app.notificationReminderTitle'), {
+              body: t('app.notificationReminderBody', { company: app.company, title: app.title }),
               icon: '/favicon.ico'
             });
           }

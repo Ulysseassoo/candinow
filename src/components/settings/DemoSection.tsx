@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Beaker, Sparkles } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/context';
 
 interface DemoSectionProps {
   onGenerate: () => void;
@@ -7,6 +8,8 @@ interface DemoSectionProps {
 }
 
 export const DemoSection = ({ onGenerate, isLoading }: DemoSectionProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-accent/10 p-6 rounded-ui border-2 border-dashed border-accent/40">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -15,8 +18,8 @@ export const DemoSection = ({ onGenerate, isLoading }: DemoSectionProps) => {
             <Beaker size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-text-primary">Mode Démonstration</h3>
-            <p className="text-text-secondary text-sm">Remplis l'application avec 50 candidatures pour tester le design.</p>
+            <h3 className="text-lg font-bold text-text-primary">{t('settings.demo.title')}</h3>
+            <p className="text-text-secondary text-sm">{t('settings.demo.description')}</p>
           </div>
         </div>
         <Button
@@ -25,7 +28,7 @@ export const DemoSection = ({ onGenerate, isLoading }: DemoSectionProps) => {
           disabled={isLoading}
           className="bg-accent hover:bg-accent/80 whitespace-nowrap"
         >
-          <Sparkles size={16} className="mr-2" /> Générer 50 tests
+          <Sparkles size={16} className="mr-2" /> {t('settings.demo.button')}
         </Button>
       </div>
     </div>

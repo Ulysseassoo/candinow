@@ -5,6 +5,8 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { routeTree } from './routeTree.gen'
+import { I18nProvider } from './lib/i18n/context'
+import useAppStore from './stores/useStore'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
@@ -24,15 +26,25 @@ declare module '@tanstack/react-router' {
   }
 }
 
+function AppWithI18n() {
+  const language = useAppStore((state) => state.language);
+
+  return (
+    <I18nProvider language={language}>
+      <RouterProvider router={router} />
+      <Analytics />
+      <SpeedInsights />
+    </I18nProvider>
+  );
+}
+
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
       <HelmetProvider>
-        <RouterProvider router={router} />
-        <Analytics />
-        <SpeedInsights />
+        <AppWithI18n />
       </HelmetProvider>
     </StrictMode>,
   )

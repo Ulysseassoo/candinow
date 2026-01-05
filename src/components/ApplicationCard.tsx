@@ -6,6 +6,7 @@ import { STATUS_CONFIG } from "@/constants";
 import { Button } from "./ui/button";
 import { getDaysSince, formatDateShort } from "@/lib/dateUtils";
 import { isFollowUpDue, getDaysUntilFollowUp } from "@/lib/followUpUtils";
+import { useTranslation } from "@/lib/i18n/context";
 
 interface Props {
     app: JobApplication;
@@ -17,6 +18,7 @@ interface Props {
 
 
 export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteApplication }: Props) => {
+    const { t } = useTranslation();
     const getDaysWithoutResponse = (appliedDate: string) => {
         return getDaysSince(appliedDate);
     };
@@ -59,7 +61,7 @@ export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteAppli
                 {app.nextFollowUpDate && isFollowUpDue(app.nextFollowUpDate) && app.status !== 'ghosted' && (
                     <div className="flex items-center gap-1.5 px-3 py-1.5 bg-warning-soft text-warning rounded-full text-[10px] font-black uppercase tracking-tighter border border-warning/20 animate-pulse">
                         <AlertCircle size={12} />
-                        Relance due
+                        {t('app.cardFollowUpDue')}
                     </div>
                 )}
                 {app.nextFollowUpDate && !isFollowUpDue(app.nextFollowUpDate) && app.status !== 'ghosted' && (() => {
@@ -68,7 +70,7 @@ export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteAppli
                         return (
                             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-soft text-primary rounded-full text-[10px] font-black uppercase tracking-tighter border border-primary/10">
                                 <Clock size={12} />
-                                Relance dans {daysUntil}j
+                                {t('app.cardFollowUpIn', { count: daysUntil })}
                             </div>
                         );
                     }
@@ -86,7 +88,7 @@ export const ApplicationCard = ({ app, setViewingApp, setEditingApp, deleteAppli
                     </Button>
                 </div>
                 <Button size="sm" variant="ghost" onClick={() => setViewingApp(app)}>
-                    Détails <ArrowRight size={14} className="ml-2" />
+                    {t('app.cardDetails')} <ArrowRight size={14} className="ml-2" />
                 </Button>
             </div>
         </motion.div>

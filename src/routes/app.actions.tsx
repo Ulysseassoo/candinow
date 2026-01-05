@@ -7,6 +7,7 @@ import { FloatingActionMenu } from '@/components/FloatingActionMenu';
 import { Modal } from '@/components/Modal';
 import { AppForm } from '@/components/AppForm';
 import { getApplicationsDueToday, getDaysUntilFollowUp } from '@/lib/followUpUtils';
+import { useTranslation } from '@/lib/i18n/context';
 import { AlertCircle, Calendar, CheckCircle, Clock, TrendingUp, Zap } from 'lucide-react';
 import type { JobApplication } from '@/types/JobApplication';
 
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/app/actions')({
 });
 
 function ActionsPage() {
+  const { t } = useTranslation();
   const { applications, addApplication, sendFollowUp } = useAppStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   // @ts-ignore
@@ -74,7 +76,7 @@ function ActionsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
             icon={AlertCircle}
-            label="Aujourd'hui"
+            label={t('app.actionsToday')}
             value={stats.dueToday}
             color="warning"
             isActive={filterView === 'today'}
@@ -82,7 +84,7 @@ function ActionsPage() {
           />
           <StatsCard
             icon={Clock}
-            label="En retard"
+            label={t('app.actionsOverdue')}
             value={stats.overdue}
             color="danger"
             isActive={filterView === 'overdue'}
@@ -90,7 +92,7 @@ function ActionsPage() {
           />
           <StatsCard
             icon={Calendar}
-            label="Cette semaine"
+            label={t('app.actionsThisWeek')}
             value={stats.upcoming}
             color="info"
             isActive={false}
@@ -98,7 +100,7 @@ function ActionsPage() {
           />
           <StatsCard
             icon={TrendingUp}
-            label="En cours"
+            label={t('app.actionsInProgress')}
             value={stats.activeFollowUps}
             color="success"
             isActive={false}
@@ -109,19 +111,19 @@ function ActionsPage() {
         {dueApplications.length > 0 && (
           <div className="flex items-center gap-3 flex-wrap">
             <FilterButton
-              label="Toutes"
+              label={t('app.actionsAll')}
               count={dueApplications.length}
               isActive={filterView === 'all'}
               onClick={() => setFilterView('all')}
             />
             <FilterButton
-              label="Aujourd'hui"
+              label={t('app.actionsToday')}
               count={stats.dueToday - stats.overdue}
               isActive={filterView === 'today'}
               onClick={() => setFilterView('today')}
             />
             <FilterButton
-              label="En retard"
+              label={t('app.actionsOverdue')}
               count={stats.overdue}
               isActive={filterView === 'overdue'}
               onClick={() => setFilterView('overdue')}
@@ -146,15 +148,15 @@ function ActionsPage() {
               <div className="max-w-md space-y-2">
                 <h3 className="text-2xl font-black text-text-primary tracking-tight">
                   {filterView === 'all'
-                    ? "Aucune action requise !"
+                    ? t('app.actionsNoActionRequired')
                     : filterView === 'today'
-                    ? "Pas d'actions pour aujourd'hui"
-                    : "Aucune action en retard"}
+                    ? t('app.actionsNoActionsToday')
+                    : t('app.actionsNoOverdue')}
                 </h3>
                 <p className="text-text-secondary font-semibold text-sm leading-relaxed">
                   {filterView === 'all'
-                    ? "Toutes tes relances sont à jour. Continue comme ça!"
-                    : "Change de filtre pour voir d'autres actions."}
+                    ? t('app.actionsAllUpToDate')
+                    : t('app.actionsChangeFilter')}
                 </p>
               </div>
               {filterView !== 'all' && (
@@ -162,7 +164,7 @@ function ActionsPage() {
                   onClick={() => setFilterView('all')}
                   className="text-primary font-bold text-sm hover:underline"
                 >
-                  Voir toutes les actions
+                  {t('app.actionsSeeAll')}
                 </button>
               )}
             </motion.div>
@@ -196,11 +198,10 @@ function ActionsPage() {
               </div>
               <div className="flex-1">
                 <h4 className="font-black text-sm text-text-primary mb-1">
-                  Astuce du jour
+                  {t('app.actionsTip')}
                 </h4>
                 <p className="text-xs text-text-secondary leading-relaxed">
-                  Les relances régulières montrent ta motivation aux recruteurs.
-                  Profite de cette page pour rester organisé et ne manquer aucune opportunité !
+                  {t('app.actionsTipMessage')}
                 </p>
               </div>
             </div>
@@ -213,7 +214,7 @@ function ActionsPage() {
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="Nouvelle candidature"
+        title={t('app.modalNewApplication')}
       >
         <AppForm
           onSubmit={(data) => {

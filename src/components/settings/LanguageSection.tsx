@@ -1,41 +1,41 @@
-import { Palette } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import useAppStore from '@/stores/useStore';
-import { themes } from '@/lib/themes';
+import type { Language } from '@/lib/i18n/types';
 import { useTranslation } from '@/lib/i18n/context';
 
-export function ThemeSection() {
-  const { theme: currentTheme, setTheme } = useAppStore();
+const LANGUAGES: { code: Language; label: string; flag: string }[] = [
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+];
+
+export function LanguageSection() {
+  const { language: currentLanguage, setLanguage } = useAppStore();
   const { t } = useTranslation();
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <div className="p-2 bg-primary-soft rounded-xl">
-          <Palette size={20} className="text-primary" />
+          <Globe size={20} className="text-primary" />
         </div>
         <div>
           <h3 className="text-[12px] font-black text-text-primary uppercase tracking-widest">
-            {t('settings.theme.title')}
+            {t('settings.language.title')}
           </h3>
           <p className="text-xs text-text-secondary font-medium mt-1">
-            {t('settings.theme.description')}
+            {t('settings.language.description')}
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {(['rose', 'corporate', 'classic']).map((themeName) => {
-          const theme = themeName === 'rose' ? themes.rose : themeName === 'corporate' ? themes.corporate : themes.classic;
-          const isSelected = currentTheme === themeName;
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {LANGUAGES.map((lang) => {
+          const isSelected = currentLanguage === lang.code;
 
           return (
             <button
-              key={themeName}
-              onClick={() => {
-                if (themeName === 'rose' || themeName === 'corporate' || themeName === 'classic') {
-                  setTheme(themeName);
-                }
-              }}
+              key={lang.code}
+              onClick={() => setLanguage(lang.code)}
               className={`
                 relative p-6 rounded-2xl border-2 transition-all text-left
                 ${isSelected
@@ -44,27 +44,10 @@ export function ThemeSection() {
                 }
               `}
             >
-              <div className="flex gap-2 mb-4">
-                <div
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                  style={{ backgroundColor: theme.colors.primary }}
-                />
-                <div
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                  style={{ backgroundColor: theme.colors.accent }}
-                />
-                <div
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                  style={{ backgroundColor: theme.colors.success }}
-                />
-              </div>
-
-              <div>
-                <div className="font-black text-sm text-text-primary mb-1">
-                  {theme.label}
-                </div>
-                <div className="text-xs text-text-secondary font-medium">
-                  {theme.description}
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-3xl">{lang.flag}</span>
+                <div className="font-black text-sm text-text-primary">
+                  {lang.label}
                 </div>
               </div>
 

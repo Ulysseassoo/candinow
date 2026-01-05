@@ -1,0 +1,38 @@
+export const status = {
+  fr: {
+    all: 'Tout',
+    applied: 'Envoyé',
+    follow_up: 'Relance',
+    interview: 'Entretien',
+    offer: 'Offre',
+    rejected: 'Refusé',
+    ghosted: 'Silence',
+    followUp: {
+      none: 'Aucune',
+      due: 'À faire',
+      planned: 'Planifiée',
+      contacted: 'Contacté',
+      awaiting: 'En attente',
+      responded: 'Réponse reçue',
+      done: 'Terminée',
+    },
+  },
+  en: {
+    all: 'All',
+    applied: 'Sent',
+    follow_up: 'Follow-up',
+    interview: 'Interview',
+    offer: 'Offer',
+    rejected: 'Rejected',
+    ghosted: 'Ghosted',
+    followUp: {
+      none: 'None',
+      due: 'Due',
+      planned: 'Planned',
+      contacted: 'Contacted',
+      awaiting: 'Waiting',
+      responded: 'Response received',
+      done: 'Done',
+    },
+  },
+};

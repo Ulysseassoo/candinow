@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Flower2 } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/context';
 
 interface AppHeaderProps {
   currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
@@ -7,14 +8,16 @@ interface AppHeaderProps {
 }
 
 export const AppHeader = ({ currentView, onLogoClick }: AppHeaderProps) => {
+  const { t } = useTranslation();
+
   const getTitle = () => {
     switch (currentView) {
-      case 'list': return 'Mes Candidatures';
-      case 'dashboard': return 'Statistiques';
-      case 'settings': return 'Gestion';
-      case 'feedback': return 'Ton avis';
-      case 'actions': return 'Actions du jour';
-      default: return 'Mes Candidatures';
+      case 'list': return t('nav.list');
+      case 'dashboard': return t('nav.dashboard');
+      case 'settings': return t('nav.settings');
+      case 'feedback': return t('nav.feedback');
+      case 'actions': return t('nav.actions');
+      default: return t('nav.list');
     }
   };
 
@@ -29,7 +32,7 @@ export const AppHeader = ({ currentView, onLogoClick }: AppHeaderProps) => {
           {getTitle()}
         </h1>
         <div className="flex items-center gap-3 text-text-secondary font-bold text-sm mt-2">
-          <span className="opacity-50 hover:cursor-pointer" onClick={onLogoClick}>Candinow</span>
+          <span className="opacity-50 hover:cursor-pointer" onClick={onLogoClick}>{t('nav.appName')}</span>
           <div className="w-1 h-1 bg-text-secondary/30 rounded-full"></div>
           <span className="text-primary-dark capitalize">{currentView}</span>
         </div>

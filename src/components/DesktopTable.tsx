@@ -6,6 +6,7 @@ import { STATUS_CONFIG } from '@/constants';
 import { FOLLOW_UP_CONFIG } from '@/constants';
 import { Button } from './ui/button';
 import { getDaysSince, formatDate } from '@/lib/dateUtils';
+import { useTranslation } from '@/lib/i18n/context';
 
 interface DesktopTableProps {
     filteredAndSortedApps: JobApplication[];
@@ -15,6 +16,7 @@ interface DesktopTableProps {
 }
 
 const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, deleteApplication }: DesktopTableProps) => {
+    const { t } = useTranslation();
     const getDaysWithoutResponse = (appliedDate: string) => {
         return getDaysSince(appliedDate);
     };
@@ -38,12 +40,12 @@ const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, del
             <table className="w-full text-left border-collapse">
                 <thead>
                     <tr className="bg-primary-soft/30 border-b border-border/40">
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">Poste & Entreprise</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">Statut</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">Appliqué le</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">Relance</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">Jours sans relance</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] text-right">Actions</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">{t('app.tableHeaderPosition')}</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">{t('app.tableHeaderStatus')}</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">{t('app.tableHeaderApplied')}</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">{t('app.tableHeaderFollowUp')}</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em]">{t('app.tableHeaderDaysSince')}</th>
+                        <th className="px-8 py-5 text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] text-right">{t('app.tableHeaderActions')}</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-border/20">
@@ -76,7 +78,7 @@ const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, del
                                 <td className="px-8 py-6">
                                     <div className="flex flex-col">
                                         <span className="text-sm font-bold text-text-primary">{formatDate(app.appliedAt)}</span>
-                                        <span className="text-[10px] font-black text-text-secondary/50 uppercase">Il y a {getDaysWithoutResponse(app.appliedAt)} jours</span>
+                                        <span className="text-[10px] font-black text-text-secondary/50 uppercase">{t('common.time.daysAgo', { count: getDaysWithoutResponse(app.appliedAt) })}</span>
                                     </div>
                                 </td>
                                 <td className="px-8 py-6">
@@ -93,9 +95,9 @@ const DesktopTable = ({ filteredAndSortedApps, setViewingApp, setEditingApp, del
                                 </td>
                                 <td className="px-8 py-6">
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-text-primary">{getDaysWithoutFollowUp(app)} jours</span>
+                                        <span className="text-sm font-bold text-text-primary">{getDaysWithoutFollowUp(app)} {t('common.time.days')}</span>
                                         {app.followUpDate && (
-                                            <span className="text-[10px] font-black text-text-secondary/50 uppercase">Depuis relance</span>
+                                            <span className="text-[10px] font-black text-text-secondary/50 uppercase">{t('app.tableSinceFollowUp')}</span>
                                         )}
                                     </div>
                                 </td>

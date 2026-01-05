@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
+import { useTranslation } from '@/lib/i18n/context';
 
 const ITEMS_PER_PAGE_OPTIONS = [10, 30, 50];
 
@@ -20,6 +21,7 @@ export const Pagination = ({
   onPageChange,
   onItemsPerPageChange,
 }: PaginationProps) => {
+  const { t } = useTranslation();
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
@@ -63,7 +65,7 @@ export const Pagination = ({
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
       <div className="flex items-center gap-3">
         <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-          Afficher:
+          {t('app.paginationShow')}
         </span>
         <div className="flex gap-2">
           {ITEMS_PER_PAGE_OPTIONS.map((size) => (
@@ -84,7 +86,7 @@ export const Pagination = ({
 
       <div className="flex items-center gap-4">
         <span className="text-xs font-bold text-text-secondary">
-          {startItem}-{endItem} sur {totalItems}
+          {startItem}-{endItem} {t('app.paginationOf')} {totalItems}
         </span>
 
         <div className="flex items-center gap-1">

@@ -19,44 +19,45 @@ import { motion } from 'framer-motion';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Helmet } from 'react-helmet-async';
-import moment from 'moment';
-
-const PROBLEM_ITEMS = [
-  { icon: XCircle, text: "Le désordre grandissant des fichiers Excel", color: "text-danger" },
-  { icon: AlertCircle, text: "L'oubli fatal d'une relance après 10 jours", color: "text-warning" },
-  { icon: Ghost, text: "La sensation de perdre le contrôle face au silence", color: "text-text-secondary" }
-];
-
-const FEATURE_ITEMS = [
-  { 
-    icon: Layout, 
-    title: "Tout au même endroit", 
-    text: "Un tableau ultra-lisible qui centralise tes postes, entreprises et contacts sans fioritures.",
-    color: "text-primary"
-  },
-  { 
-    icon: Clock, 
-    title: "Relances intelligentes", 
-    text: "L'app détecte automatiquement quand une relance est due et te le signale visuellement.",
-    color: "text-accent"
-  },
-  { 
-    icon: Zap, 
-    title: "Zéro Configuration", 
-    text: "Pas de compte, pas de cloud, pas de formules Excel complexes. Tu ouvres, tu notes, c'est fait.",
-    color: "text-success"
-  }
-];
+import { useTranslation } from '@/lib/i18n/context';
 
 export const Landing = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const PROBLEM_ITEMS = [
+    { icon: XCircle, text: t('landing.problems.excelMess'), color: "text-danger" },
+    { icon: AlertCircle, text: t('landing.problems.forgottenFollowUp'), color: "text-warning" },
+    { icon: Ghost, text: t('landing.problems.lostControl'), color: "text-text-secondary" }
+  ];
+
+  const FEATURE_ITEMS = [
+    {
+      icon: Layout,
+      title: t('landing.features.title'),
+      text: t('landing.features.subtitle'),
+      color: "text-primary"
+    },
+    {
+      icon: Clock,
+      title: t('landing.features.smartFollowUps'),
+      text: t('landing.features.smartFollowUpsDesc'),
+      color: "text-accent"
+    },
+    {
+      icon: Zap,
+      title: t('landing.features.zeroConfig'),
+      text: t('landing.features.zeroConfigDesc'),
+      color: "text-success"
+    }
+  ];
 
   const seoData = {
-    title: 'Candinow - Tracker de candidatures moderne et offline-first',
-    description: 'Organisez votre recherche d\'emploi efficacement. Candinow est un tracker de candidatures moderne, 100% offline et gratuit. Gérez vos candidatures, relances et entretiens avec une interface claire et intuitive.',
+    title: t('landing.seo.title'),
+    description: t('landing.seo.description'),
     url: 'https://candinow.com',
     image: 'https://candinow.com/logo512.png',
-    keywords: 'tracker candidatures, recherche emploi, suivi candidatures, job tracking, offline app, PWA, tracker job, candidatures France, gestion candidatures',
+    keywords: t('landing.seo.keywords'),
   };
 
   const containerVariants = {
@@ -156,7 +157,7 @@ export const Landing = () => {
         </div>
         <div className="hidden md:flex items-center gap-8">
           <Button variant="ghost" size="sm" className="rounded-full" onClick={() => navigate({ to: '/app' })}>
-            Accéder à l'App
+            {t('landing.hero.ctaPrimary')}
           </Button>
         </div>
       </motion.header>
@@ -176,28 +177,26 @@ export const Landing = () => {
         >
           <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 bg-primary-soft rounded-full text-primary-dark">
             <Sparkles size={14} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Optimiser votre recherche de job</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">{t('landing.hero.title')}</span>
           </motion.div>
 
           <motion.h1 variants={itemVariants} className="text-5xl lg:text-8xl font-black text-text-primary tracking-tighter leading-[0.9]">
-            Organisez votre futur job, <br />
-            <span className="text-primary italic">sans le stress.</span>
+            {t('landing.hero.subtitle')}
           </motion.h1>
 
           <motion.p variants={itemVariants} className="max-w-2xl mx-auto text-lg lg:text-xl font-medium text-text-secondary leading-relaxed">
-            Candinow est un tracker de candidatures <strong>moderne</strong> et <strong>100% offline</strong>.
-            Gérez vos candidatures, relances et entretiens avec une interface claire et efficace.
+            {t('landing.hero.description')}
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <Button size="lg" className="h-16 px-10 text-sm rounded-full" onClick={() => navigate({ to: '/app' })}>
-              Commencer gratuitement <ArrowRight size={18} className="ml-2" />
+              {t('landing.hero.ctaSecondary')} <ArrowRight size={18} className="ml-2" />
             </Button>
             <Button variant="outline" size="lg" className="h-16 px-10 text-sm rounded-full" onClick={() => {
               const el = document.getElementById('preview');
               el?.scrollIntoView({ behavior: 'smooth' });
             }}>
-              Voir l'interface
+              {t('landing.hero.ctaTertiary')}
             </Button>
           </motion.div>
         </motion.div>
@@ -213,10 +212,10 @@ export const Landing = () => {
             className="space-y-6"
           >
             <h2 className="text-4xl lg:text-5xl font-black text-text-primary tracking-tighter leading-tight">
-              Chercher un job, c'est déjà assez stressant.
+              {t('landing.problems.title')}
             </h2>
             <p className="text-text-secondary font-medium text-lg leading-relaxed">
-              Pourquoi s'épuiser à gérer des tableaux complexes quand on devrait se concentrer sur l'essentiel : décrocher son prochain job.
+              {t('landing.problems.subtitle')}
             </p>
             <ul className="space-y-4 pt-4">
               {PROBLEM_ITEMS.map((item, i) => (
@@ -268,8 +267,8 @@ export const Landing = () => {
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="text-center mb-16 space-y-4"
           >
-            <h2 className="text-3xl lg:text-5xl font-black text-text-primary tracking-tighter">Un tracking limpide.</h2>
-            <p className="text-text-secondary font-bold uppercase text-xs tracking-widest">L'efficacité dans la douceur.</p>
+            <h2 className="text-3xl lg:text-5xl font-black text-text-primary tracking-tighter">{t('landing.features.tracking')}</h2>
+            <p className="text-text-secondary font-bold uppercase text-xs tracking-widest">{t('landing.features.softEfficiency')}</p>
           </motion.div>
 
           <motion.div 
@@ -290,7 +289,7 @@ export const Landing = () => {
                 </div>
                 <div className="flex-1 max-w-md mx-auto relative px-4">
                   <div className="bg-background border border-border rounded-full py-1.5 px-10 text-[10px] text-text-secondary/40 font-bold flex items-center gap-2">
-                    <Search size={12} /> app.candinow.local
+                    <Search size={12} /> candinow.app
                   </div>
                 </div>
                 <div className="w-20"></div>
@@ -300,11 +299,11 @@ export const Landing = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                   <div className="relative w-full sm:w-80">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary opacity-40" size={18} />
-                    <div className="w-full bg-primary-soft/20 border border-border rounded-full py-3 px-12 text-sm text-text-secondary/60 italic">Rechercher...</div>
+                    <div className="w-full bg-primary-soft/20 border border-border rounded-full py-3 px-12 text-sm text-text-secondary/60 italic">{t('landing.features.previewSearch')}</div>
                   </div>
                   <div className="flex gap-3 w-full sm:w-auto">
                     <div className="bg-primary text-white rounded-full px-6 py-3 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                      <Plus size={16} /> Ajouter
+                      <Plus size={16} /> {t('landing.features.previewAdd')}
                     </div>
                   </div>
                 </div>
@@ -313,9 +312,9 @@ export const Landing = () => {
                   <table className="w-full text-left">
                     <thead className="bg-primary-soft/20">
                       <tr>
-                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">Poste</th>
-                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">Statut</th>
-                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">Tracking</th>
+                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">{t('landing.features.previewPosition')}</th>
+                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">{t('landing.features.previewStatus')}</th>
+                        <th className="px-8 py-5 text-[9px] font-black text-text-secondary uppercase tracking-widest">{t('landing.features.previewTracking')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/20">
@@ -326,7 +325,7 @@ export const Landing = () => {
                         </td>
                         <td className="px-8 py-6">
                           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-success-soft text-[#6A994E] rounded-full text-[10px] font-black uppercase tracking-tighter border border-success/10">
-                            <CheckCircle2 size={12} /> Entretien
+                            <CheckCircle2 size={12} /> {t('landing.features.previewInterview')}
                           </div>
                         </td>
                         <td className="px-8 py-6">
@@ -341,7 +340,7 @@ export const Landing = () => {
               </div>
             </div>
 
-            <motion.div 
+            <motion.div
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               className="absolute -bottom-6 -right-6 lg:-right-12 bg-accent/20 backdrop-blur-md p-6 rounded-[32px] border border-border/50 shadow-lg hidden lg:block"
@@ -351,8 +350,8 @@ export const Landing = () => {
                   <Clock size={24} />
                 </div>
                 <div>
-                  <div className="text-[10px] font-black text-text-primary uppercase tracking-widest">Relance automatique</div>
-                  <div className="text-xs font-bold text-text-secondary mt-0.5">Plus aucun oubli.</div>
+                  <div className="text-[10px] font-black text-text-primary uppercase tracking-widest">{t('landing.features.autoFollowUp')}</div>
+                  <div className="text-xs font-bold text-text-secondary mt-0.5">{t('landing.features.noMissing')}</div>
                 </div>
               </div>
             </motion.div>
@@ -369,8 +368,8 @@ export const Landing = () => {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="space-y-4"
           >
-            <h2 className="text-4xl lg:text-6xl font-black text-text-primary tracking-tighter">Candinow te dit quoi faire.</h2>
-            <p className="text-text-secondary font-bold uppercase text-xs tracking-[0.3em]">L'intelligence au service de ta sérénité</p>
+            <h2 className="text-4xl lg:text-6xl font-black text-text-primary tracking-tighter">{t('landing.features.tellsYouWhat')}</h2>
+            <p className="text-text-secondary font-bold uppercase text-xs tracking-[0.3em]">{t('landing.features.intelligence')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -407,9 +406,9 @@ export const Landing = () => {
           transition={{ duration: 2 }}
           className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-around gap-12 grayscale group hover:grayscale-0 transition-all duration-1000"
         >
-           <div className="flex items-center gap-2 font-black text-xl"><MousePointer2 /> Fast.</div>
-           <div className="flex items-center gap-2 font-black text-xl"><Flower2 /> Aesthetic.</div>
-           <div className="flex items-center gap-2 font-black text-xl"><WifiOff /> Private.</div>
+           <div className="flex items-center gap-2 font-black text-xl"><MousePointer2 /> {t('landing.characteristics.fast')}.</div>
+           <div className="flex items-center gap-2 font-black text-xl"><Flower2 /> {t('landing.characteristics.aesthetic')}.</div>
+           <div className="flex items-center gap-2 font-black text-xl"><WifiOff /> {t('landing.characteristics.private')}.</div>
         </motion.div>
       </section>
 
@@ -425,7 +424,7 @@ export const Landing = () => {
           <span className="font-black text-text-primary">Candinow</span>
         </div>
         <p className="text-[10px] font-black text-text-secondary uppercase tracking-[0.3em] text-center">
-          © {moment().year()} Candinow — Tous droits réservés.
+          {t('landing.footer.copyright', { year: new Date().getFullYear() })}
         </p>
       </footer>
     </div>

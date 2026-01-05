@@ -10,20 +10,21 @@ import { Button } from './ui/button';
 import { formatDateForInput, getTodayISO } from '@/lib/dateUtils';
 import { Download, Loader2 } from 'lucide-react';
 import { importJobFromLink } from '@/lib/jobLinkUtils';
+import { useTranslation } from '@/lib/i18n/context';
 
-const appSchema = z.object({
-  title: z.string().min(2, "L'intitulé est trop court"),
-  company: z.string().min(1, "L'entreprise est requise"),
+const createAppSchema = (t: (key: string) => string) => z.object({
+  title: z.string().min(2, t('validation.titleTooShort')),
+  company: z.string().min(1, t('validation.companyRequired')),
   status: z.enum(['applied', 'follow_up', 'interview', 'offer', 'rejected', 'ghosted']),
-  appliedAt: z.string().min(1, "La date est requise"),
+  appliedAt: z.string().min(1, t('validation.dateRequired')),
   source: z.string().optional(),
-  jobLink: z.string().url("URL invalide").optional().or(z.literal('')),
+  jobLink: z.string().url(t('validation.invalidUrl')).optional().or(z.literal('')),
   location: z.string().optional(),
   domain: z.string().optional(),
   followUpStatus: z.enum(['none', 'due', 'planned', 'done', 'contacted', 'awaiting', 'responded']),
   followUpDate: z.string().optional(),
   contactName: z.string().optional(),
-  contactEmail: z.string().email("Email invalide").optional().or(z.literal('')),
+  contactEmail: z.string().email(t('validation.invalidEmail')).optional().or(z.literal('')),
   contactPhone: z.string().optional(),
   contactMethod: z.enum(['email', 'phone']),
   interviewDate: z.string().optional(),
@@ -33,7 +34,7 @@ const appSchema = z.object({
   reminderAt: z.string().optional(),
 });
 
-type AppFormValues = z.infer<typeof appSchema>;
+type AppFormValues = z.infer<ReturnType<typeof createAppSchema>>;
 
 interface AppFormProps {
   initialData?: JobApplication;
@@ -42,6 +43,8 @@ interface AppFormProps {
 }
 
 export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
+  const { t } = useTranslation();
+  const appSchema = createAppSchema(t);
   const {
     register,
     handleSubmit,
@@ -70,7 +73,7 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
 
   const handleImportFromLink = async () => {
     if (!jobLinkValue || jobLinkValue.trim() === '') {
-      setImportError('Veuillez entrer une URL');
+      setImportError(t('validation.pleaseEnterUrl'));
       return;
     }
 
@@ -107,7 +110,7 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
       setTimeout(() => setImportSuccess(false), 3000);
 
     } catch (error) {
-      setImportError(error instanceof Error ? error.message : 'Erreur inconnue');
+      setImportError(error instanceof Error ? error.message : t('validation.unknownError'));
     } finally {
       setIsImporting(false);
     }
@@ -122,40 +125,40 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="max-h-[60vh] lg:max-h-[65vh] overflow-y-auto pr-3 custom-scrollbar no-scrollbar pb-4">
-        <h3 className={sectionTitle}>1. Informations du Poste</h3>
+        <h3 className={sectionTitle}>{t('app.formSection1')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="md:col-span-2">
-            <label className={labelClasses}>Intitulé du Poste *</label>
-            <Input {...register('title')} placeholder="ex: Senior Designer" className={errors.title ? 'border-danger/50 bg-danger-soft/10' : ''} />
+            <label className={labelClasses}>{t('app.titleLabel')}</label>
+            <Input {...register('title')} placeholder={t('app.titlePlaceholder')} className={errors.title ? 'border-danger/50 bg-danger-soft/10' : ''} />
             {errors.title && <p className={errorClasses}>{errors.title.message}</p>}
           </div>
           <div className="md:col-span-2">
-            <label className={labelClasses}>Entreprise *</label>
-            <Input {...register('company')} placeholder="ex: Blossom Soft" className={errors.company ? 'border-danger/50 bg-danger-soft/10' : ''} />
+            <label className={labelClasses}>{t('app.companyLabel')}</label>
+            <Input {...register('company')} placeholder={t('app.companyPlaceholder')} className={errors.company ? 'border-danger/50 bg-danger-soft/10' : ''} />
             {errors.company && <p className={errorClasses}>{errors.company.message}</p>}
           </div>
           <div>
-            <label className={labelClasses}>Localisation</label>
-            <Input {...register('location')} placeholder="ex: Paris / Remote" />
+            <label className={labelClasses}>{t('app.locationLabel')}</label>
+            <Input {...register('location')} placeholder={t('app.locationPlaceholder')} />
           </div>
           <div>
-            <label className={labelClasses}>Domaine</label>
-            <Input {...register('domain')} placeholder="ex: Tech / Design" />
+            <label className={labelClasses}>{t('app.domainLabel')}</label>
+            <Input {...register('domain')} placeholder={t('app.domainPlaceholder')} />
           </div>
           <div className="md:col-span-2">
-            <label className={labelClasses}>Lien de l'offre</label>
+            <label className={labelClasses}>{t('app.urlLabel')}</label>
             <div className="flex gap-2 items-start">
               <div className="flex-1">
                 <Input
                   {...register('jobLink')}
-                  placeholder="https://linkedin.com/jobs/..."
+                  placeholder={t('app.urlPlaceholder')}
                   className={errors.jobLink ? 'border-danger/50 bg-danger-soft/10' : ''}
                 />
                 {errors.jobLink && <p className={errorClasses}>{errors.jobLink.message}</p>}
                 {importError && <p className={errorClasses}>{importError}</p>}
                 {importSuccess && (
                   <p className="text-[10px] text-green-600 font-bold mt-1 ml-1">
-                    ✓ Données importées avec succès
+                    ✓ {t('app.importSuccess')}
                   </p>
                 )}
               </div>
@@ -170,60 +173,60 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
                 {isImporting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Import...
+                    {t('app.importShortButton')}
                   </>
                 ) : (
                   <>
                     <Download className="w-4 h-4" />
-                    Importer
+                    {t('app.importButton')}
                   </>
                 )}
               </Button>
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className={labelClasses}>Description de l'offre</label>
+            <label className={labelClasses}>{t('app.descriptionLabel')}</label>
             <textarea
               {...register('description')}
               rows={4}
               className="w-full px-4 py-3 bg-background border border-border rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm text-foreground resize-none"
-              placeholder="Description complète de l'offre d'emploi (importée automatiquement)"
+              placeholder={t('validation.descriptionPlaceholder')}
             />
           </div>
           <div>
-            <label className={labelClasses}>Salaire</label>
-            <Input {...register('salary')} placeholder="ex: 45k - 55k€" />
+            <label className={labelClasses}>{t('app.salaryLabel')}</label>
+            <Input {...register('salary')} placeholder={t('app.salaryPlaceholder')} />
           </div>
         </div>
 
-        <h3 className={sectionTitle}>2. Détails du Contact</h3>
+        <h3 className={sectionTitle}>{t('app.formSection2')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className={labelClasses}>Nom du Contact</label>
-            <Input {...register('contactName')} placeholder="Jane Doe" />
+            <label className={labelClasses}>{t('app.contactNameLabel')}</label>
+            <Input {...register('contactName')} placeholder={t('app.contactNamePlaceholder')} />
           </div>
           <div>
-            <label className={labelClasses}>Méthode préférée</label>
+            <label className={labelClasses}>{t('app.preferredContactLabel')}</label>
             <select {...register('contactMethod')} className={selectClasses}>
-              <option value="email">Email</option>
-              <option value="phone">Téléphone</option>
+              <option value="email">{t('app.contactMethodEmail')}</option>
+              <option value="phone">{t('app.contactMethodPhone')}</option>
             </select>
           </div>
           <div>
-            <label className={labelClasses}>Email</label>
-            <Input {...register('contactEmail')} placeholder="jane@company.com" />
+            <label className={labelClasses}>{t('app.contactEmailLabel')}</label>
+            <Input {...register('contactEmail')} placeholder={t('app.contactEmailPlaceholder')} />
             {errors.contactEmail && <p className={errorClasses}>{errors.contactEmail.message}</p>}
           </div>
           <div>
-            <label className={labelClasses}>Téléphone</label>
-            <Input {...register('contactPhone')} placeholder="+33 6 ..." />
+            <label className={labelClasses}>{t('app.contactPhoneLabel')}</label>
+            <Input {...register('contactPhone')} placeholder={t('app.contactPhonePlaceholder')} />
           </div>
         </div>
 
-        <h3 className={sectionTitle}>3. Progression & Dates</h3>
+        <h3 className={sectionTitle}>{t('app.formSection3')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className={labelClasses}>Statut Principal</label>
+            <label className={labelClasses}>{t('app.statusLabel')}</label>
             <select {...register('status')} className={selectClasses}>
               {Object.entries(STATUS_CONFIG).filter(([k]) => k !== 'all').map(([key, config]) => (
                 <option key={key} value={key}>{config.label}</option>
@@ -231,11 +234,11 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
             </select>
           </div>
           <div>
-            <label className={labelClasses}>Date de Candidature</label>
+            <label className={labelClasses}>{t('app.appliedAtLabel')}</label>
             <Input {...register('appliedAt')} type="date" />
           </div>
           <div>
-            <label className={labelClasses}>Statut Relance</label>
+            <label className={labelClasses}>{t('app.followUpStatusLabel')}</label>
             <select {...register('followUpStatus')} className={selectClasses}>
               {Object.entries(FOLLOW_UP_CONFIG).map(([key, config]) => (
                 <option key={key} value={key}>{config.label}</option>
@@ -243,28 +246,28 @@ export const AppForm = ({ initialData, onSubmit, onCancel }: AppFormProps) => {
             </select>
           </div>
           <div>
-            <label className={labelClasses}>Prochain Rappel</label>
+            <label className={labelClasses}>{t('app.nextFollowUpLabel')}</label>
             <Input {...register('reminderAt')} type="date" />
           </div>
         </div>
 
         <div className="mt-6">
-          <label className={labelClasses}>Notes & Réflexions</label>
+          <label className={labelClasses}>{t('app.notesLabel')}</label>
           <textarea 
             {...register('notes')}
             rows={4} 
             className="w-full px-4 py-3 bg-background border border-border rounded-ui focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm text-foreground resize-none"
-            placeholder="Points clés, questions à poser..."
+            placeholder={t('validation.notesPlaceholder')}
           />
         </div>
       </div>
       
       <div className="pt-4 flex gap-4 sticky bottom-0 bg-background border-t border-border/20 mt-auto">
         <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
-          Annuler
+          {t('app.cancelButton')}
         </Button>
         <Button type="submit" className="flex-[2]" disabled={isSubmitting}>
-          {initialData ? 'Mettre à jour' : 'Créer la candidature'}
+          {initialData ? t('app.updateButton') : t('app.createButton')}
         </Button>
       </div>
     </form>

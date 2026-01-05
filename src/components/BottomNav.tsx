@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { LayoutDashboard, ListTodo, Settings as SettingsIcon, MessageSquareHeart, CheckSquare } from 'lucide-react';
 import { NavItem } from './NavItem';
+import { useTranslation } from '@/lib/i18n/context';
 
 interface BottomNavProps {
   currentView: 'list' | 'dashboard' | 'settings' | 'feedback' | 'actions';
@@ -9,6 +10,8 @@ interface BottomNavProps {
 }
 
 export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: BottomNavProps) => {
+  const { t } = useTranslation();
+
   return (
     <motion.nav
       initial={{ y: 120, opacity: 0 }}
@@ -20,7 +23,7 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       <NavItem
         id="list"
         icon={ListTodo}
-        label="Liste"
+        label={t('nav.listShort')}
         isActive={currentView === 'list'}
         onClick={() => onViewChange('list')}
         variant="bottom"
@@ -28,7 +31,7 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       <NavItem
         id="actions"
         icon={CheckSquare}
-        label="Actions"
+        label={t('nav.actionsShort')}
         isActive={currentView === 'actions'}
         onClick={() => onViewChange('actions')}
         variant="bottom"
@@ -37,7 +40,7 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       <NavItem
         id="dashboard"
         icon={LayoutDashboard}
-        label="Stats"
+        label={t('nav.stats')}
         isActive={currentView === 'dashboard'}
         onClick={() => onViewChange('dashboard')}
         variant="bottom"
@@ -45,7 +48,7 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       <NavItem
         id="settings"
         icon={SettingsIcon}
-        label="Réglages"
+        label={t('nav.settingsShort')}
         isActive={currentView === 'settings'}
         onClick={() => onViewChange('settings')}
         variant="bottom"
@@ -53,7 +56,7 @@ export const BottomNav = ({ currentView, onViewChange, actionsDueCount = 0 }: Bo
       <NavItem
         id="feedback"
         icon={MessageSquareHeart}
-        label="Avis"
+        label={t('nav.feedbackShort')}
         isActive={currentView === 'feedback'}
         onClick={() => onViewChange('feedback')}
         variant="bottom"

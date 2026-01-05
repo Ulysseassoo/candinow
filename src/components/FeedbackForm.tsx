@@ -6,12 +6,7 @@ import { Button } from './ui/button';
 import { Sparkles, Bug, Heart, CheckCircle2 } from 'lucide-react';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { sendFeedbackEmail } from '@/lib/feedbackUtils';
-
-const FEEDBACK_TYPES = [
-  { id: 'love', icon: Heart, label: 'Love', color: 'text-primary' },
-  { id: 'feature', icon: Sparkles, label: 'Idée', color: 'text-accent' },
-  { id: 'bug', icon: Bug, label: 'Bug', color: 'text-danger' },
-];
+import { useTranslation } from '@/lib/i18n/context';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
@@ -26,9 +21,16 @@ interface FeedbackFormProps {
 }
 
 export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
+  const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isOnline = useOnlineStatus();
+
+  const FEEDBACK_TYPES = [
+    { id: 'love', icon: Heart, label: t('feedback.typeLove'), color: 'text-primary' },
+    { id: 'feature', icon: Sparkles, label: t('feedback.typeIdea'), color: 'text-accent' },
+    { id: 'bug', icon: Bug, label: t('feedback.typeBug'), color: 'text-danger' },
+  ];
   
   const {
     register,
@@ -41,17 +43,17 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
 
   const onSubmit = async (data: FeedbackFormValues) => {
     setError(null);
-    
+
     if (!isOnline) {
-      setError('Vous êtes actuellement hors ligne. Veuillez vous connecter à Internet pour envoyer votre message.');
+      setError(t('feedback.errorOffline'));
       return;
     }
-    
+
     try {
       await sendFeedbackEmail(data);
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'envoi');
+      setError(err instanceof Error ? err.message : t('feedback.errorGeneral'));
     }
   };
 
@@ -62,12 +64,12 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
           <CheckCircle2 size={48} />
         </div>
         <div>
-          <h3 className="text-2xl font-black text-text-primary tracking-tight">Merci beaucoup !</h3>
-          <p className="text-text-secondary font-medium mt-2">Tes retours aident Candinow à grandir.</p>
+          <h3 className="text-2xl font-black text-text-primary tracking-tight">{t('feedback.successTitle')}</h3>
+          <p className="text-text-secondary font-medium mt-2">{t('feedback.successDescription')}</p>
         </div>
         {onClose && (
           <Button onClick={onClose} variant="outline" className="mt-4">
-            Fermer
+            {t('feedback.closeButton')}
           </Button>
         )}
       </div>
@@ -80,7 +82,7 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
         {onClose && (
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-text-secondary leading-relaxed">
-              Une idée ? Un bug ? Ou juste envie de partager ton expérience ? Dis-nous tout.
+              {t('feedback.description')}
             </p>
           </div>
         )}
@@ -92,11 +94,11 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
         )}
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest ml-1">Ton Nom</label>
+          <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest ml-1">{t('feedback.nameLabel')}</label>
           <input
             type="text"
             {...register('name')}
-            placeholder="Ex: Marie Dupont"
+            placeholder={t('feedback.namePlaceholder')}
             className={`w-full px-5 py-4 bg-background border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm text-foreground ${errors.name ? 'border-danger/50' : 'border-border focus:border-primary'}`}
           />
           {errors.name && <p className="text-[10px] text-danger font-bold mt-1 ml-1">{errors.name.message}</p>}
@@ -120,10 +122,10 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest ml-1">Ton Message</label>
-          <textarea 
+          <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest ml-1">{t('feedback.messageLabel')}</label>
+          <textarea
             {...register('message')}
-            placeholder="J'aimerais beaucoup voir une vue calendrier..."
+            placeholder={t('feedback.messagePlaceholder')}
             rows={5}
             className={`w-full px-5 py-4 bg-background border rounded-ui focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all text-sm text-foreground resize-none ${errors.message ? 'border-danger/50' : 'border-border focus:border-primary'}`}
           />
@@ -133,10 +135,10 @@ export const FeedbackForm = ({ onClose }: FeedbackFormProps) => {
 
       <div className="flex gap-4">
         {onClose && (
-          <Button type="button" variant="ghost" onClick={onClose} className="flex-1">Plus tard</Button>
+          <Button type="button" variant="ghost" onClick={onClose} className="flex-1">{t('feedback.laterButton')}</Button>
         )}
         <Button type="submit" disabled={isSubmitting} className={onClose ? "flex-[2]" : "w-full"}>
-          Envoyer mon avis
+          {t('feedback.submitButton')}
         </Button>
       </div>
     </form>

@@ -2,12 +2,15 @@ import { createFileRoute } from '@tanstack/react-router';
 import { FeedbackForm } from '@/components/FeedbackForm';
 import { MessageSquareHeart } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n/context';
 
 export const Route = createFileRoute('/app/feedback')({
   component: FeedbackPage,
 });
 
 function FeedbackPage() {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -21,11 +24,11 @@ function FeedbackPage() {
               <MessageSquareHeart size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-text-primary tracking-tight">Ton avis compte</h1>
+              <h1 className="text-2xl font-black text-text-primary tracking-tight">{t('feedback.title')}</h1>
             </div>
           </div>
           <p className="text-text-secondary font-medium leading-relaxed">
-            Partage tes idées, signale un bug ou dis-nous ce que tu aimes. Chaque retour nous aide à améliorer Candinow.
+            {t('feedback.description')}
           </p>
         </div>
 
